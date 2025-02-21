@@ -3,23 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krantenwijk Webtool</title>
+    <title>Wijkbeheer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Krantenwijk Webtool</h1>
-        <div class="form">
-            <input type="text" id="adresInput" placeholder="Voeg een adres toe">
-            <button id="addAdresBtn">Voeg toe</button>
-        </div>
-        <ul id="adresList"></ul>
-        <div class="timer">
-            <button id="startBtn">Start</button>
-            <button id="stopBtn" disabled>Stop</button>
-            <p id="timeDisplay">00:00</p>
-        </div>
-    </div>
+    <h1>Wijkbeheer</h1>
+    <form id="adresForm">
+        <input type="text" id="adresInput" placeholder="Voer een nieuw adres in" required>
+        <button type="submit">Voeg adres toe</button>
+    </form>
+    <ul id="adresLijst"></ul>
     <script src="script.js"></script>
 </body>
 </html>
