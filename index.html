@@ -20,23 +20,14 @@
                 </tr>
             </thead>
             <tbody id="address-list">
-                <!-- Adressen worden hier geladen -->
+                <!-- Adressen worden hier geladen door de JavaScript -->
             </tbody>
         </table>
 
-        // Functie om een nieuwe bezorging toe te voegen
-function addDelivery() {
-    // Je kunt bijvoorbeeld een prompt gebruiken om de naam en het adres van een nieuw adres in te voeren
-    const name = prompt("Voer de naam in:");
-    const address = prompt("Voer het adres in:");
+        <!-- Knop om bezorging toe te voegen -->
+        <button id="add-delivery-btn" onclick="addDelivery()">Voeg Bezorging Toe</button>
+    </div>
 
-    if (name && address) {
-        // Voeg het nieuwe adres toe aan de array
-        const newAddress = { name: name, address: address };
-        addresses.push(newAddress);
-
-        // Herlaad de lijst met adressen
-        renderAddressList();
-    }
-}
-
+    <script src="script.js"></script>
+</body>
+</html>
