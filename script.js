@@ -1,47 +1,53 @@
-let addresses = []; // Lege array die we later vullen met de data uit het JSON-bestand
+let addresses = []; // Dit wordt gevuld met de gegevens uit je JSON bestand
 
-// Functie om de lijst van adressen weer te geven
-function renderAddressList() {
-    const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
-
-    addresses.forEach((address, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${address.name}</td>
-            <td>${address.address}</td>
-            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
-            <td><input type="date" id="date-${index}" onchange="setDeliveryDate(${index})"></td>
-        `;
-        addressListElement.appendChild(tr);
-    });
-}
-
-// Functie om de bezorgstatus van een adres te wijzigen
-function toggleAddress(index) {
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    if (checkbox.checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-    } else {
-        localStorage.removeItem(`address-${index}-status`);
-    }
-}
-
-// Functie om een bezorgdatum in te stellen
-function setDeliveryDate(index) {
-    const dateInput = document.getElementById(`date-${index}`);
-    const date = dateInput.value;
-    localStorage.setItem(`address-${index}-date`, date);
-}
-
-// Laad het JSON-bestand met adressen en render ze
-fetch('adresgegevens.json')
-    .then(response => response.json()) // Zorg ervoor dat het antwoord JSON is
+// Haal de adresgegevens op vanaf GitHub Pages
+fetch('https://raw.githubusercontent.com/Jaco1988duivensport/krantenwijk-app/main/adresgegevens.json')
+    .then(response => response.json())
     .then(data => {
-        addresses = data; // Vul de array met de geladen data
-        renderAddressList(); // Render de lijst met adressen
+        addresses = data;  // Vul de addresses array met de data
+        renderAddressList();  // Render de adressen op de pagina
     })
     .catch(error => {
         console.error('Error loading addresses:', error);
-        alert('Er is een probleem met het laden van de adressen. Zorg ervoor dat het JSON-bestand correct is en probeer het opnieuw.');
+        alert('Er is een probleem met het laden van de adressen.');
     });
+
+// Functie om de adressen weer te geven in de tabel
+function renderAddressList() {
+    const addressListElement = document.getElementById('address-list');
+    addressListElement.innerHTML = ''; // Maak de lijst leeg
+
+    addresses.forEach((address, index) => {
+        const row = document.createElement('tr');
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = address.name;
+        row.appendChild(nameCell);
+
+        const addressCell = document.createElement('td');
+        addressCell.textContent = address.address;
+        row.appendChild(addressCell);
+
+        const statusCell = document.createElement('td');
+        statusCell.textContent = address.delivered ? 'Bezorgd' : 'Niet bezorgd';
+        row.appendChild(statusCell);
+
+        const dateCell = document.createElement('td');
+        dateCell.textContent = address.deliveryDate ? address.deliveryDate : 'N.v.t.';
+        row.appendChild(dateCell);
+
+        // Voeg de rij toe aan de tabel
+        addressListElement.appendChild(row);
+    });
+}
+
+// Functie om alle adressen als bezorgd te markeren
+function markAllAsDelivered() {
+    addresses.forEach(address => {
+        if (!address.delivered) {
+            address.delivered = true;
+            address.deliveryDate = new Date().toLocaleDateString(); // Huidige datum
+        }
+    });
+    renderAddressList();  // Werk de lijst bij
+}
