@@ -52,7 +52,6 @@ function renderAddressList() {
             <td>${address.name}</td>
             <td>${address.address}</td>
             <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
-            <td><input type="date" id="date-${index}" onchange="setDeliveryDate(${index})"></td>
         `;
         addressListElement.appendChild(tr);
     });
@@ -64,18 +63,8 @@ function toggleAddress(index) {
     if (checkbox.checked) {
         localStorage.setItem(`address-${index}-status`, "bezorgd");
     } else {
-        localStorage.removeItem(`address-${index}-status`); // Correcte afsluitende aanhalingstekens toegevoegd
+        localStorage.removeItem(`address-${index}-status`);
     }
 }
 
-// Functie om een bezorgdatum in te stellen
-function setDeliveryDate(index) {
-    const dateInput = document.getElementById(`date-${index}`);
-    const date = dateInput.value;
-    localStorage.setItem(`address-${index}-date`, date);
-}
-
-// Functie om de lijst van adressen bij te werken
-document.addEventListener("DOMContentLoaded", function() {
-    renderAddressList();
-});
+// Functie om de
