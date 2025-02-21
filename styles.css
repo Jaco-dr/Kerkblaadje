@@ -1,53 +1,78 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krantenwijk Tool</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Krantenwijk Tool</h1>
-        
-        <!-- Wijk Aanmaken -->
-        <div class="form-section" id="wijk-aanmaken">
-            <label for="wijkNaam">Naam van de Wijk:</label>
-            <input type="text" id="wijkNaam" placeholder="Vul de naam van de wijk in">
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-            <label for="startTijd">Start Tijd:</label>
-            <input type="time" id="startTijd">
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-            <label for="stopTijd">Stop Tijd:</label>
-            <input type="time" id="stopTijd">
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
 
-            <button id="maakWijk">Maak Wijk aan</button>
-        </div>
-        
-        <!-- Wijk Selecteren en Timer -->
-        <div class="form-section" id="selecteer-wijk" style="display: none;">
-            <label for="wijkSelecteren">Selecteer Wijk:</label>
-            <select id="wijkSelecteren"></select>
-            <button id="startWijk">Start Wijk</button>
-        </div>
+h1 {
+    margin-bottom: 20px;
+}
 
-        <!-- Adressen Beheren (wordt pas zichtbaar na wijk aanmaken) -->
-        <div class="form-section" id="adressen-beheren" style="display: none;">
-            <h2>Beheer Adressen</h2>
-            <button id="voegAdresToe">Voeg Adres toe</button>
-            <ul id="adressenLijst"></ul>
-            <button id="slaWijkOp">Opslaan</button>
-        </div>
+section {
+    margin-bottom: 20px;
+}
 
-        <!-- Krantenwijk Timer -->
-        <div id="timerSection" style="display: none;">
-            <h2>Krantenwijk Timer</h2>
-            <p id="timerDisplay">Tijd: 00:00:00</p>
-            <button id="stopWijk">Stop Wijk</button>
-        </div>
+input[type="text"] {
+    padding: 10px;
+    width: 80%;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-    </div>
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-    <script src="app.js"></script>
-</body>
-</html>
+button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    background-color: #f1f1f1;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li.completed {
+    background-color: #d4edda;
+    text-decoration: line-through;
+}
+
+select {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+}
