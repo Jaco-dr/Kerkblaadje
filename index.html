@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Kerkblaadjes Bezorgtool</h1>
-    <div>
+    <div class="container">
+        <h1>Kerkblaadjes Bezorgtool</h1>
+
+        <!-- Tabel voor de bezorging -->
         <table id="address-table">
             <thead>
                 <tr>
@@ -18,8 +20,13 @@
                     <th>Bezorgdatum</th>
                 </tr>
             </thead>
-            <tbody id="address-list"></tbody>
+            <tbody id="address-list">
+                <!-- Adressen worden hier geladen -->
+            </tbody>
         </table>
+
+        <!-- Knop om bezorging toe te voegen -->
+        <button id="add-delivery-btn" onclick="addDelivery()">Voeg Bezorging Toe</button>
     </div>
     <script src="script.js"></script>
 </body>
