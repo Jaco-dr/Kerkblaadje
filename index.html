@@ -3,33 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krantenwijk Tool</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Krantenwijk Webtool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Krantenwijk Tool</h1>
-
-        <!-- Formulier om adressen toe te voegen -->
-        <div id="add-address" class="address-form">
-            <input type="text" id="address-input" placeholder="Voeg een adres toe..." class="input-field">
-            <button onclick="addAddress()" class="add-btn">Voeg toe</button>
+        <h1>Krantenwijk Webtool</h1>
+        <div class="form">
+            <input type="text" id="adresInput" placeholder="Voeg een adres toe">
+            <button id="addAdresBtn">Voeg toe</button>
         </div>
-
-        <!-- Adreslijst -->
-        <h2>Adreslijst</h2>
-        <ul id="address-list" class="address-list"></ul>
-
-        <!-- Timer -->
-        <h2>Timer</h2>
-        <div class="timer-container">
-            <p id="timer" class="timer">Tijd: 00:00</p>
-            <button onclick="startTimer()" class="start-btn">Start</button>
-            <button onclick="stopTimer()" class="stop-btn">Stop</button>
+        <ul id="adresList"></ul>
+        <div class="timer">
+            <button id="startBtn">Start</button>
+            <button id="stopBtn" disabled>Stop</button>
+            <p id="timeDisplay">00:00</p>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
