@@ -64,7 +64,7 @@ function toggleAddress(index) {
     if (checkbox.checked) {
         localStorage.setItem(`address-${index}-status`, "bezorgd");
     } else {
-        localStorage.removeItem(`address-${index}-status");
+        localStorage.removeItem(`address-${index}-status`); // Correcte afsluitende aanhalingstekens toegevoegd
     }
 }
 
