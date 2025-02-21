@@ -1,28 +1,16 @@
-// Functie om het JSON-bestand in te lezen en de adressen weer te geven
-function loadJsonFile() {
-    const fileInput = document.getElementById('file-input');
-    const file = fileInput.files[0]; // Verkrijg het bestand
+// Functie om de JSON van de externe URL (bijvoorbeeld GitHub) te laden
+function loadJsonFromGitHub() {
+    const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';  // URL naar het JSON-bestand
 
-    if (!file) {
-        alert("Selecteer een bestand.");
-        return;
-    }
-
-    const reader = new FileReader(); // Maak een bestand-lezer aan
-    reader.onload = function(e) {
-        try {
-            // Parse de JSON-inhoud van het bestand
-            const addresses = JSON.parse(e.target.result);
-
-            // Render de adressen
-            renderAddressList(addresses);
-        } catch (error) {
-            alert("Fout bij het lezen van het bestand.");
-        }
-    };
-
-    // Lees het bestand als tekst
-    reader.readAsText(file);
+    fetch(url)
+        .then(response => response.json()) // Zet de response om naar JSON
+        .then(addresses => {
+            renderAddressList(addresses); // Roep de functie aan om de adressen weer te geven
+        })
+        .catch(error => {
+            console.error("Fout bij het laden van het JSON-bestand:", error);
+            alert("Er is een fout opgetreden bij het laden van het JSON-bestand.");
+        });
 }
 
 // Functie om de lijst van adressen weer te geven
@@ -52,7 +40,7 @@ function toggleAddress(index) {
     }
 }
 
-// Functie voor het toevoegen van een bezorging (voorbeeld, kun je verder aanpassen)
-function addDelivery() {
-    alert('Functie om bezorging toe te voegen is nog niet geïmplementeerd.');
-}
+// Zorg ervoor dat de JSON-bestanden geladen worden zodra de pagina klaar is
+document.addEventListener("DOMContentLoaded", function() {
+    loadJsonFromGitHub();
+});
