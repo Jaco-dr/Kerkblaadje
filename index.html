@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adres Bezorging</title>
+    <title>Kerkblaadjes Bezorgtool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Adres Bezorging</h1>
-        <ul id="address-list"></ul> <!-- Hier worden de adressen weergegeven -->
-        <button id="complete-all" onclick="completeAll()">Markeer alles als bezorgd</button>
+    <h1>Kerkblaadjes Bezorgtool</h1>
+    <div>
+        <table id="address-table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Bezorgstatus</th>
+                    <th>Bezorgdatum</th>
+                </tr>
+            </thead>
+            <tbody id="address-list"></tbody>
+        </table>
     </div>
     <script src="script.js"></script>
 </body>
