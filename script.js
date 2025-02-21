@@ -1,46 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const adresForm = document.getElementById('adresForm');
+    const wijkForm = document.getElementById('wijkForm');
+    const wijkNaam = document.getElementById('wijkNaam');
     const adresInput = document.getElementById('adresInput');
+    const voegAdresToe = document.getElementById('voegAdresToe');
     const adresLijst = document.getElementById('adresLijst');
+    const verwijderLaatsteAdres = document.getElementById('verwijderLaatsteAdres');
+    const slaWijkOp = document.getElementById('slaWijkOp');
+    const adresSectie = document.getElementById('adresSectie');
 
-    // Haal de opgeslagen wijkgegevens op
-    let wijkData = JSON.parse(localStorage.getItem('wijkData')) || [];
+    let wijkData = {
+        naam: '',
+        adressen: []
+    };
 
-    // Functie om de lijst met adressen bij te werken
-    function updateAdresLijst() {
-        adresLijst.innerHTML = '';
-        wijkData.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${item.adres}</span>
-                <button data-index="${index}">Verwijder</button>
-            `;
-            adresLijst.appendChild(li);
-        });
-    }
-
-    // Voeg een nieuw adres toe
-    adresForm.addEventListener('submit', (e) => {
+    wijkForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        wijkData.naam = wijkNaam.value.trim();
+        if (wijkData.naam) {
+            wijkForm.style.display = 'none';
+            adresSectie.style.display = 'block';
+        }
+    });
+
+    voegAdresToe.addEventListener('click', () => {
         const nieuwAdres = adresInput.value.trim();
         if (nieuwAdres) {
-            wijkData.push({ adres: nieuwAdres });
-            localStorage.setItem('wijkData', JSON.stringify(wijkData));
+            wijkData.adressen.push(nieuwAdres);
+            const li = document.createElement('li');
+            li.textContent = nieuwAdres;
+            adresLijst.appendChild(li);
             adresInput.value = '';
-            updateAdresLijst();
         }
     });
 
-    // Verwijder een adres
-    adresLijst.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            const index = e.target.getAttribute('data-index');
-            wijkData.splice(index, 1);
-            localStorage.setItem('wijkData', JSON.stringify(wijkData));
-            updateAdresLijst();
-        }
+    verwijderLaatsteAdres.addEventListener('click', () => {
+        wijkData.adressen.pop();
+        adresLijst.removeChild(adresLijst.lastChild);
     });
 
-    // Laad de lijst met adressen bij het laden van de pagina
-    updateAdresLijst();
+    slaWijkOp.addEventListener('click', () => {
+        if (wijkData.adressen.length > 0) {
+            localStorage.setItem(wijkData.naam, JSON.stringify(wijkData));
+            alert('Wijk opgeslagen!');
+            // Reset de interface voor een nieuwe wijk
+            wijkForm.style.display = 'block';
+            adresSectie.style.display = 'none';
+            wijkNaam.value = '';
+            adresLijst.innerHTML = '';
+            wijkData = { naam: '', adressen: [] };
+        } else {
+            alert('Voeg eerst adressen toe voordat je de wijk opslaat.');
+        }
+    });
 });
