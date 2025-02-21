@@ -3,43 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krantenwijk Tool</title>
+    <title>Adresbeheer Webtool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Krantenwijk Tool</h1>
-
-        <!-- Wijk aanmaken -->
-        <section class="wijk-aanmaken">
-            <input type="text" id="wijkNaam" placeholder="Naam van wijk">
-            <button id="createWijkBtn">Wijk aanmaken</button>
-        </section>
-
-        <!-- Wijk kiezen -->
-        <section class="wijk-kiezen">
-            <h2>Kies een wijk</h2>
-            <select id="wijkSelect">
-                <option value="">Selecteer een wijk</option>
-            </select>
-            <button id="startBtn">Start Wijk</button>
-        </section>
-
-        <!-- Adressen -->
-        <section class="adressen">
-            <h2>Adressen in wijk</h2>
-            <input type="text" id="adresInput" placeholder="Voeg een adres toe">
-            <button id="addAdresBtn">Adres toevoegen</button>
-            <ul id="adresList"></ul>
-        </section>
-
-        <!-- Acties voor krantenwijk -->
-        <section class="actie">
-            <h2>Bezorgen</h2>
-            <ul id="bezorgList"></ul>
-        </section>
+        <h1>Bezorgen Adressen Lijst</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Opmerkingen</th>
+                    <th>Bezorgen</th>
+                </tr>
+            </thead>
+            <tbody id="address-list">
+                <!-- Adressen worden hier dynamisch geladen via JavaScript -->
+            </tbody>
+        </table>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
