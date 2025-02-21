@@ -62,4 +62,27 @@ function toggleAddress(index) {
     if (checkbox.checked) {
         localStorage.setItem(`address-${index}`, "bezorgd");
     } else {
-        localStorage.removeItem(`address-${index}
+        localStorage.removeItem(`address-${index}`);
+    }
+}
+
+// Functie om alles af te vinken
+function completeAll() {
+    addresses.forEach((address, index) => {
+        const checkbox = document.getElementById(`checkbox-${index}`);
+        checkbox.checked = true;
+        localStorage.setItem(`address-${index}`, "bezorgd");
+    });
+}
+
+// Laad de lijst bij het openen van de pagina
+document.addEventListener("DOMContentLoaded", function() {
+    renderAddressList();
+
+    // Vink de adressen af die al als bezorgd zijn gemarkeerd
+    addresses.forEach((address, index) => {
+        if (localStorage.getItem(`address-${index}`) === "bezorgd") {
+            document.getElementById(`checkbox-${index}`).checked = true;
+        }
+    });
+});
