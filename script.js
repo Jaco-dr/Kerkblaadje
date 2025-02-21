@@ -46,6 +46,7 @@ function renderAddressList() {
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
+    // Loop door de adressen en voeg ze toe aan de tabel
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -67,4 +68,7 @@ function toggleAddress(index) {
     }
 }
 
-// Functie om de
+// Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
+document.addEventListener("DOMContentLoaded", function() {
+    renderAddressList();
+});
