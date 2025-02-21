@@ -1,79 +1,83 @@
-let addressList = [];
-let timerInterval;
-let startTime;
-let elapsedTime = 0;
+document.addEventListener('DOMContentLoaded', () => {
+    const addAdresBtn = document.getElementById('addAdresBtn');
+    const adresInput = document.getElementById('adresInput');
+    const adresList = document.getElementById('adresList');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const timeDisplay = document.getElementById('timeDisplay');
 
-// Laad de opgeslagen wijk uit localStorage (indien aanwezig)
-window.onload = function() {
-    if(localStorage.getItem('addressList')) {
-        addressList = JSON.parse(localStorage.getItem('addressList'));
-        renderAddressList();
-    }
-};
+    let timer;
+    let seconds = 0;
+    let isRunning = false;
 
-// Voeg een adres toe
-function addAddress() {
-    const addressInput = document.getElementById("address-input");
-    const newAddress = addressInput.value;
-    if(newAddress) {
-        addressList.push({ address: newAddress, delivered: false });
-        addressInput.value = "";
-        saveAddressList();
-        renderAddressList();
-    }
-}
+    // Laad opgeslagen wijkgegevens uit localStorage
+    const loadWijkData = () => {
+        const wijkData = JSON.parse(localStorage.getItem('wijkData')) || { adressen: [] };
+        wijkData.adressen.forEach(adres => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <input type="checkbox" ${adres.afgevinkt ? 'checked' : ''}>
+                <span>${adres.adres}</span>
+            `;
+            adresList.appendChild(li);
+        });
+    };
 
-// Opslaan van adreslijst naar localStorage
-function saveAddressList() {
-    localStorage.setItem('addressList', JSON.stringify(addressList));
-}
+    // Sla wijkgegevens op in localStorage
+    const saveWijkData = () => {
+        const adressen = [];
+        const items = adresList.querySelectorAll('li');
+        items.forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            const span = item.querySelector('span');
+            adressen.push({ adres: span.textContent, afgevinkt: checkbox.checked });
+        });
+        localStorage.setItem('wijkData', JSON.stringify({ adressen }));
+    };
 
-// Render de adressen in de lijst
-function renderAddressList() {
-    const list = document.getElementById("address-list");
-    list.innerHTML = "";
-    addressList.forEach((item, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <input type="checkbox" id="address-${index}" ${item.delivered ? "checked" : ""} onclick="toggleDelivered(${index})">
-            ${item.address}
-        `;
-        list.appendChild(li);
+    // Voeg een nieuw adres toe
+    addAdresBtn.addEventListener('click', () => {
+        const adres = adresInput.value.trim();
+        if (adres) {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <input type="checkbox">
+                <span>${adres}</span>
+            `;
+            adresList.appendChild(li);
+            adresInput.value = '';
+            saveWijkData();
+        }
     });
-}
 
-// Toggle de afvinkstatus
-function toggleDelivered(index) {
-    addressList[index].delivered = !addressList[index].delivered;
-    saveAddressList();
-}
+    // Start de timer
+    startBtn.addEventListener('click', () => {
+        if (!isRunning) {
+            isRunning = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            timer = setInterval(() => {
+                seconds++;
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+    });
 
-// Start de timer
-function startTimer() {
-    startTime = Date.now() - elapsedTime;
-    timerInterval = setInterval(updateTimer, 1000);
-    document.querySelector(".start-btn").disabled = true;
-    document.querySelector(".stop-btn").disabled = false;
-}
+    // Stop de timer
+    stopBtn.addEventListener('click', () => {
+        if (isRunning) {
+            isRunning = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            clearInterval(timer);
+        }
+    });
 
-// Stop de timer
-function stopTimer() {
-    clearInterval(timerInterval);
-    elapsedTime = Date.now() - startTime;
-    document.querySelector(".start-btn").disabled = false;
-    document.querySelector(".stop-btn").disabled = true;
-}
+    // Laad de wijkgegevens bij het laden van de pagina
+    loadWijkData();
 
-// Update de timer weergave
-function updateTimer() {
-    const currentTime = Date.now();
-    const elapsed = currentTime - startTime;
-    const minutes = Math.floor(elapsed / 60000);
-    const seconds = Math.floor((elapsed % 60000) / 1000);
-    document.getElementById("timer").innerText = `Tijd: ${formatTime(minutes)}:${formatTime(seconds)}`;
-}
-
-// Formatteer tijd als 2 cijfers
-function formatTime(time) {
-    return time < 10 ? '0' + time : time;
-}
+    // Sla de wijkgegevens op bij het verlaten van de pagina
+    window.addEventListener('beforeunload', saveWijkData);
+});
