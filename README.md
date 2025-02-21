@@ -1,1 +1,1 @@
-# krantenwijk-app
+# krantenwijk
