@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wijkbeheer</title>
+    <title>Krantenwijk Beheer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Wijkbeheer</h1>
-    <form id="adresForm">
-        <input type="text" id="adresInput" placeholder="Voer een nieuw adres in" required>
-        <button type="submit">Voeg adres toe</button>
+    <h1>Krantenwijk Beheer</h1>
+    <form id="wijkForm">
+        <input type="text" id="wijkNaam" placeholder="Naam van de wijk" required>
+        <button type="submit">Maak wijk aan</button>
     </form>
-    <ul id="adresLijst"></ul>
+    <div id="adresSectie" style="display: none;">
+        <h2>Voeg adressen toe aan de wijk</h2>
+        <input type="text" id="adresInput" placeholder="Voer een adres in" required>
+        <button id="voegAdresToe">Voeg adres toe</button>
+        <ul id="adresLijst"></ul>
+        <button id="verwijderLaatsteAdres">Verwijder laatste adres</button>
+        <button id="slaWijkOp">Sla wijk op</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
