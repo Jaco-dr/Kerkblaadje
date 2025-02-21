@@ -23,7 +23,7 @@ function toggleAddress(index) {
     if (checkbox.checked) {
         localStorage.setItem(`address-${index}-status`, "bezorgd");
     } else {
-        localStorage.removeItem(`address-${index}-status");
+        localStorage.removeItem(`address-${index}-status`);
     }
 }
 
@@ -34,18 +34,14 @@ function setDeliveryDate(index) {
     localStorage.setItem(`address-${index}-date`, date);
 }
 
-// Functie om een nieuw adres toe te voegen (dynamisch via JSON bestand)
-function addAddress(name, address) {
-    addresses.push({ name, address });
-    renderAddressList(); // Render de lijst opnieuw met het nieuwe adres
-}
-
 // Laad het JSON-bestand met adressen en render ze
 fetch('adresgegevens.json')
-    .then(response => response.json())
+    .then(response => response.json()) // Zorg ervoor dat het antwoord JSON is
     .then(data => {
         addresses = data; // Vul de array met de geladen data
         renderAddressList(); // Render de lijst met adressen
     })
-    .catch(error => console.error('Error loading addresses:', error));
-
+    .catch(error => {
+        console.error('Error loading addresses:', error);
+        alert('Er is een probleem met het laden van de adressen. Zorg ervoor dat het JSON-bestand correct is en probeer het opnieuw.');
+    });
