@@ -8,7 +8,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 600px;
+    max-width: 900px;
     margin: 20px auto;
     padding: 20px;
     background-color: #fff;
@@ -21,29 +21,24 @@ h1 {
     color: #333;
 }
 
-/* Lijststijl */
-ul {
-    list-style-type: none;
-    padding: 0;
+/* Tabelstijl */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+th, td {
     padding: 12px;
-    border-bottom: 1px solid #ddd;
-    font-size: 14px; /* Kleinere tekst voor mobiel */
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-li:last-child {
-    border-bottom: none;
+th {
+    background-color: #f2f2f2;
 }
 
-.checkbox {
-    margin-right: 10px;
-}
-
+/* Knopstijl */
 button {
     background-color: #4CAF50;
     color: white;
@@ -51,30 +46,16 @@ button {
     padding: 12px 24px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px; /* Grotere knop voor mobiel */
+    font-size: 16px;
 }
 
-button:disabled {
-    background-color: #ddd;
-}
-
-button:hover:not(:disabled) {
+button:hover {
     background-color: #45a049;
 }
 
-/* Mobiele optimalisatie */
 @media screen and (max-width: 600px) {
     .container {
         width: 90%;
         padding: 15px;
-    }
-
-    li {
-        font-size: 16px; /* Vergroot de tekst iets op mobiele apparaten */
-        padding: 12px 8px; /* Verklein de padding voor mobiel */
-    }
-
-    button {
-        padding: 10px 20px; /* Grote knoppen voor mobiel gebruik */
     }
 }
