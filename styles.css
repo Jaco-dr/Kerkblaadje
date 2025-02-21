@@ -4,48 +4,36 @@ body {
     background-color: #f4f4f4;
 }
 
-h1 {
+h1, h2 {
     text-align: center;
 }
 
-form {
+form, #adresSectie {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 20px;
 }
 
-#adresInput {
+input[type="text"] {
     width: 70%;
     padding: 10px;
-    margin-right: 5px;
+    margin-bottom: 10px;
 }
 
 button {
     padding: 10px;
+    margin: 5px;
 }
 
 ul {
     list-style-type: none;
     padding: 0;
+    width: 70%;
 }
 
 li {
     background: #fff;
     margin: 5px 0;
     padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-li button {
-    background: red;
-    color: white;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-}
-
-li button:hover {
-    background: darkred;
 }
