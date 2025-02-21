@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adresbeheer Webtool</title>
+    <title>Kerkblaadjes Bezorgtool</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Bezorgen Adressen Lijst</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Adres</th>
-                    <th>Opmerkingen</th>
-                    <th>Bezorgen</th>
-                </tr>
-            </thead>
-            <tbody id="address-list">
-                <!-- Adressen worden hier dynamisch geladen via JavaScript -->
-            </tbody>
-        </table>
-    </div>
+    <h1>Kerkblaadjes Bezorgtool</h1>
+    <table id="deliveryTable">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Adres</th>
+                <th>Bezorgstatus</th>
+                <th>Bezorgdatum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamisch gegenereerde data -->
+        </tbody>
+    </table>
+    <form id="newDeliveryForm">
+        <input type="text" id="name" placeholder="Naam" required>
+        <input type="text" id="address" placeholder="Adres" required>
+        <input type="date" id="deliveryDate" required>
+        <button type="submit">Voeg Bezorging Toe</button>
+    </form>
     <script src="script.js"></script>
 </body>
 </html>
