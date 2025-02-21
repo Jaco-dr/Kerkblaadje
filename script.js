@@ -1,66 +1,65 @@
-// Adressenlijst als objecten
+// De lijst met adressen
 const addresses = [
-    { naam: 'Mw. van de Broek', adres: 'Vermeerlaan 1', opmerkingen: '', bezorgd: false },
-    { naam: 'Wilmar Hardeman', adres: 'Glashorst 46', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Wisse', adres: 'Glashorst 68', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. de Jager', adres: 'Glashorst 70', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Velthuizen', adres: 'Pluimenweg 17', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. van Ginkel', adres: 'Industrielaan 10', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. van de Kamp', adres: 'Prinsenlaan 42', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. den Hartog', adres: 'Prinsenlaan 35', opmerkingen: '', bezorgd: false },
-    { naam: 'Mw. Boer', adres: 'Stationsweg 334', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Haanschoten', adres: 'Stationsweg 338', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. van Dijkhuizen', adres: 'Industrielaan 4', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. van den Bosch', adres: 'Burg. Röell-laan 9', opmerkingen: '', bezorgd: false },
-    { naam: 'Mw. Mulder', adres: 'Holevoetlaan 45', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Westeneng', adres: 'Het Pella 1', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Brand', adres: 'Burg. Colijn de Raadsingel 12', opmerkingen: '', bezorgd: false },
-    { naam: 'Dhr. Hardeman', adres: 'Vierzinnen 52', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Heijkamp', adres: 'Vierzinnen 18', opmerkingen: '', bezorgd: false },
-    { naam: 'Mw. van Setten', adres: 'Lindenlaan 54', opmerkingen: '', bezorgd: false },
-    { naam: 'Mw. Kieft', adres: 'Lindenlaan 32', opmerkingen: '', bezorgd: false },
-    { naam: 'Mw. ten Broek', adres: 'Wilgenhof 29', opmerkingen: 'Brievenbus zit in de poort', bezorgd: false },
-    { naam: 'Fam. Gardenier', adres: 'Wilgenhof 33', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Geurtsen', adres: 'Willaerlaan 50', opmerkingen: '', bezorgd: false },
-    { naam: 'Dhr. Versteeg', adres: 'Pr Irenelaan 32', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Meerkerk', adres: 'Pr Marijkelaan 44', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Uitbeijersen', adres: 'Ruijsdaellaan 12', opmerkingen: '', bezorgd: false },
-    { naam: 'Dhr. van de Kamp', adres: 'Ruijsdaellaan 15', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Florijn', adres: 'Rembrandtlaan 50', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Berkhof', adres: 'Eikenlaan 77', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. van Rumpt', adres: 'Egelpad 5', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. den Braber', adres: 'Eikenlaan 129', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Leijen', adres: 'Rembrandtlaan 84', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Koppe', adres: 'Paulus Potterlaan 19', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. v.d. Brink', adres: 'Paulus Potterlaan 21', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. de Kruijf', adres: 'Burg. H.v. Konijnenburglaan 34', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Gardenier', adres: 'Burg. H.v. Konijnenburglaan 30', opmerkingen: '', bezorgd: false },
-    { naam: 'Dhr. Kampert', adres: 'Burg. H.v. Konijnenburglaan 13', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. v.d. Wetering', adres: 'Frans Halslaan 20', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. Schouten', adres: 'Frans Halslaan 34', opmerkingen: '', bezorgd: false },
-    { naam: 'Fam. de Ruiter', adres: 'Burg. H v. konijnenburglaan 14', opmerkingen: '', bezorgd: false },
+    { name: 'Mw. van de Broek', address: 'Vermeerlaan 1' },
+    { name: 'Wilmar Hardeman', address: 'Glashorst 46' },
+    { name: 'Fam. Wisse', address: 'Glashorst 68' },
+    { name: 'Fam. de Jager', address: 'Glashorst 70' },
+    { name: 'Fam. Velthuizen', address: 'Pluimenweg 17' },
+    { name: 'Fam. van Ginkel', address: 'Industrielaan 10' },
+    { name: 'Fam. van de Kamp', address: 'Prinsenlaan 42' },
+    { name: 'Fam. den Hartog', address: 'Prinsenlaan 35' },
+    { name: 'Mw. Boer', address: 'Stationsweg 334' },
+    { name: 'Fam. Haanschoten', address: 'Stationsweg 338' },
+    { name: 'Fam. van Dijkhuizen', address: 'Industrielaan 4' },
+    { name: 'Fam. van den Bosch', address: 'Burg. Röell-laan 9' },
+    { name: 'Mw. Mulder', address: 'Holevoetlaan 45' },
+    { name: 'Fam. Westeneng', address: 'Het Pella 1' },
+    { name: 'Fam. Brand', address: 'Burg. Colijn de Raadsingel 12' },
+    { name: 'Dhr. Hardeman', address: 'Vierzinnen 52' },
+    { name: 'Fam. Heijkamp', address: 'Vierzinnen 18' },
+    { name: 'Mw. van Setten', address: 'Lindenlaan 54' },
+    { name: 'Mw. Kieft', address: 'Lindenlaan 32' },
+    { name: 'Mw. ten Broek', address: 'Wilgenhof 29' },
+    { name: 'Fam. Gardenier', address: 'Wilgenhof 33' },
+    { name: 'Fam. Geurtsen', address: 'Willaerlaan 50' },
+    { name: 'Dhr. Versteeg', address: 'Pr Irenelaan 32' },
+    { name: 'Fam. Meerkerk', address: 'Pr Marijkelaan 44' },
+    { name: 'Fam. Uitbeijersen', address: 'Ruijsdaellaan 12' },
+    { name: 'Dhr. van de Kamp', address: 'Ruijsdaellaan 15' },
+    { name: 'Fam. Florijn', address: 'Rembrandtlaan 50' },
+    { name: 'Fam. Berkhof', address: 'Eikenlaan 77' },
+    { name: 'Fam. van Rumpt', address: 'Egelpad 5' },
+    { name: 'Fam. den Braber', address: 'Eikenlaan 129' },
+    { name: 'Fam. Leijen', address: 'Rembrandtlaan 84' },
+    { name: 'Fam. Koppe', address: 'Paulus Potterlaan 19' },
+    { name: 'Fam. v.d. Brink', address: 'Paulus Potterlaan 21' },
+    { name: 'Fam. de Kruijf', address: 'Burg. H.v. Konijnenburglaan 34' },
+    { name: 'Fam. Gardenier', address: 'Burg. H.v. Konijnenburglaan 30' },
+    { name: 'Dhr. Kampert', address: 'Burg. H.v. Konijnenburglaan 13' },
+    { name: 'Fam. v.d. Wetering', address: 'Frans Halslaan 20' },
+    { name: 'Fam. Schouten', address: 'Frans Halslaan 34' },
+    { name: 'Fam. de Ruiter', address: 'Burg. H v. Konijnenburglaan 14' }
 ];
 
-// Functie om de adressen in de tabel te laden
-function loadAddresses() {
-    const addressList = document.getElementById('address-list');
-    addressList.innerHTML = ''; // Leeg de lijst
+// Functie om de lijst met adressen weer te geven
+function renderAddressList() {
+    const addressListElement = document.getElementById("address-list");
+    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
+
     addresses.forEach((address, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${address.naam}</td>
-            <td>${address.adres}</td>
-            <td>${address.opmerkingen}</td>
-            <td><input type="checkbox" id="checkbox-${index}" ${address.bezorgd ? 'checked' : ''} onclick="toggleDelivery(${index})"></td>
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <span>${address.name} - ${address.address}</span>
+            <input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})">
         `;
-        addressList.appendChild(row);
+        addressListElement.appendChild(li);
     });
 }
 
-// Functie om de bezorgstatus bij te werken
-function toggleDelivery(index) {
-    addresses[index].bezorgd = !addresses[index].bezorgd;
-}
-
-// Laad de adressen zodra de pagina geladen is
-window.onload = loadAddresses;
+// Functie om een adres af te vinken
+function toggleAddress(index) {
+    const checkbox = document.getElementById(`checkbox-${index}`);
+    if (checkbox.checked) {
+        localStorage.setItem(`address-${index}`, "bezorgd");
+    } else {
+        localStorage.removeItem(`address-${index}
