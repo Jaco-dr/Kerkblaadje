@@ -1,45 +1,25 @@
-/* Algemene stijl */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
-
-/* Container en centreren van inhoud */
-.container {
-    width: 80%;
-    margin: 0 auto;
-    padding-top: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-/* Tabelstijl */
 table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
+    border-collapse: collapse;
 }
-
 table, th, td {
     border: 1px solid #ddd;
 }
-
 th, td {
     padding: 10px;
     text-align: left;
 }
-
-th {
+button {
+    padding: 10px;
     background-color: #4CAF50;
     color: white;
-}
-
-/* Checkboxstijl */
-input[type="checkbox"] {
-    margin: 0;
+    border: none;
+    cursor: pointer;
 }
