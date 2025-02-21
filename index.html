@@ -9,45 +9,37 @@
 <body>
     <div class="container">
         <h1>Krantenwijk Tool</h1>
-        
-        <!-- Wijk Aanmaken -->
-        <div class="form-section" id="wijk-aanmaken">
-            <label for="wijkNaam">Naam van de Wijk:</label>
-            <input type="text" id="wijkNaam" placeholder="Vul de naam van de wijk in">
 
-            <label for="startTijd">Start Tijd:</label>
-            <input type="time" id="startTijd">
+        <!-- Wijk aanmaken -->
+        <section class="wijk-aanmaken">
+            <input type="text" id="wijkNaam" placeholder="Naam van wijk">
+            <button id="createWijkBtn">Wijk aanmaken</button>
+        </section>
 
-            <label for="stopTijd">Stop Tijd:</label>
-            <input type="time" id="stopTijd">
+        <!-- Wijk kiezen -->
+        <section class="wijk-kiezen">
+            <h2>Kies een wijk</h2>
+            <select id="wijkSelect">
+                <option value="">Selecteer een wijk</option>
+            </select>
+            <button id="startBtn">Start Wijk</button>
+        </section>
 
-            <button id="maakWijk">Maak Wijk aan</button>
-        </div>
-        
-        <!-- Wijk Selecteren en Timer -->
-        <div class="form-section" id="selecteer-wijk" style="display: none;">
-            <label for="wijkSelecteren">Selecteer Wijk:</label>
-            <select id="wijkSelecteren"></select>
-            <button id="startWijk">Start Wijk</button>
-        </div>
+        <!-- Adressen -->
+        <section class="adressen">
+            <h2>Adressen in wijk</h2>
+            <input type="text" id="adresInput" placeholder="Voeg een adres toe">
+            <button id="addAdresBtn">Adres toevoegen</button>
+            <ul id="adresList"></ul>
+        </section>
 
-        <!-- Adressen Beheren (wordt pas zichtbaar na wijk aanmaken) -->
-        <div class="form-section" id="adressen-beheren" style="display: none;">
-            <h2>Beheer Adressen</h2>
-            <button id="voegAdresToe">Voeg Adres toe</button>
-            <ul id="adressenLijst"></ul>
-            <button id="slaWijkOp">Opslaan</button>
-        </div>
-
-        <!-- Krantenwijk Timer -->
-        <div id="timerSection" style="display: none;">
-            <h2>Krantenwijk Timer</h2>
-            <p id="timerDisplay">Tijd: 00:00:00</p>
-            <button id="stopWijk">Stop Wijk</button>
-        </div>
-
+        <!-- Acties voor krantenwijk -->
+        <section class="actie">
+            <h2>Bezorgen</h2>
+            <ul id="bezorgList"></ul>
+        </section>
     </div>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
