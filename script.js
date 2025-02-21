@@ -1,53 +1,81 @@
-let addresses = []; // Dit wordt gevuld met de gegevens uit je JSON bestand
+// De lijst met adressen
+const addresses = [
+    { name: 'Mw. van de Broek', address: 'Vermeerlaan 1' },
+    { name: 'Wilmar Hardeman', address: 'Glashorst 46' },
+    { name: 'Fam. Wisse', address: 'Glashorst 68' },
+    { name: 'Fam. de Jager', address: 'Glashorst 70' },
+    { name: 'Fam. Velthuizen', address: 'Pluimenweg 17' },
+    { name: 'Fam. van Ginkel', address: 'Industrielaan 10' },
+    { name: 'Fam. van de Kamp', address: 'Prinsenlaan 42' },
+    { name: 'Fam. den Hartog', address: 'Prinsenlaan 35' },
+    { name: 'Mw. Boer', address: 'Stationsweg 334' },
+    { name: 'Fam. Haanschoten', address: 'Stationsweg 338' },
+    { name: 'Fam. van Dijkhuizen', address: 'Industrielaan 4' },
+    { name: 'Fam. van den Bosch', address: 'Burg. Röell-laan 9' },
+    { name: 'Mw. Mulder', address: 'Holevoetlaan 45' },
+    { name: 'Fam. Westeneng', address: 'Het Pella 1' },
+    { name: 'Fam. Brand', address: 'Burg. Colijn de Raadsingel 12' },
+    { name: 'Dhr. Hardeman', address: 'Vierzinnen 52' },
+    { name: 'Fam. Heijkamp', address: 'Vierzinnen 18' },
+    { name: 'Mw. van Setten', address: 'Lindenlaan 54' },
+    { name: 'Mw. Kieft', address: 'Lindenlaan 32' },
+    { name: 'Mw. ten Broek', address: 'Wilgenhof 29' },
+    { name: 'Fam. Gardenier', address: 'Wilgenhof 33' },
+    { name: 'Fam. Geurtsen', address: 'Willaerlaan 50' },
+    { name: 'Dhr. Versteeg', address: 'Pr Irenelaan 32' },
+    { name: 'Fam. Meerkerk', address: 'Pr Marijkelaan 44' },
+    { name: 'Fam. Uitbeijersen', address: 'Ruijsdaellaan 12' },
+    { name: 'Dhr. van de Kamp', address: 'Ruijsdaellaan 15' },
+    { name: 'Fam. Florijn', address: 'Rembrandtlaan 50' },
+    { name: 'Fam. Berkhof', address: 'Eikenlaan 77' },
+    { name: 'Fam. van Rumpt', address: 'Egelpad 5' },
+    { name: 'Fam. den Braber', address: 'Eikenlaan 129' },
+    { name: 'Fam. Leijen', address: 'Rembrandtlaan 84' },
+    { name: 'Fam. Koppe', address: 'Paulus Potterlaan 19' },
+    { name: 'Fam. v.d. Brink', address: 'Paulus Potterlaan 21' },
+    { name: 'Fam. de Kruijf', address: 'Burg. H.v. Konijnenburglaan 34' },
+    { name: 'Fam. Gardenier', address: 'Burg. H.v. Konijnenburglaan 30' },
+    { name: 'Dhr. Kampert', address: 'Burg. H.v. Konijnenburglaan 13' },
+    { name: 'Fam. v.d. Wetering', address: 'Frans Halslaan 20' },
+    { name: 'Fam. Schouten', address: 'Frans Halslaan 34' },
+    { name: 'Fam. de Ruiter', address: 'Burg. H v. Konijnenburglaan 14' }
+];
 
-// Haal de adresgegevens op vanaf GitHub Pages
-fetch('https://raw.githubusercontent.com/Jaco1988duivensport/krantenwijk-app/main/adresgegevens.json')
-    .then(response => response.json())
-    .then(data => {
-        addresses = data;  // Vul de addresses array met de data
-        renderAddressList();  // Render de adressen op de pagina
-    })
-    .catch(error => {
-        console.error('Error loading addresses:', error);
-        alert('Er is een probleem met het laden van de adressen.');
-    });
-
-// Functie om de adressen weer te geven in de tabel
+// Functie om de lijst van adressen weer te geven
 function renderAddressList() {
-    const addressListElement = document.getElementById('address-list');
-    addressListElement.innerHTML = ''; // Maak de lijst leeg
+    const addressListElement = document.getElementById("address-list");
+    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
     addresses.forEach((address, index) => {
-        const row = document.createElement('tr');
-
-        const nameCell = document.createElement('td');
-        nameCell.textContent = address.name;
-        row.appendChild(nameCell);
-
-        const addressCell = document.createElement('td');
-        addressCell.textContent = address.address;
-        row.appendChild(addressCell);
-
-        const statusCell = document.createElement('td');
-        statusCell.textContent = address.delivered ? 'Bezorgd' : 'Niet bezorgd';
-        row.appendChild(statusCell);
-
-        const dateCell = document.createElement('td');
-        dateCell.textContent = address.deliveryDate ? address.deliveryDate : 'N.v.t.';
-        row.appendChild(dateCell);
-
-        // Voeg de rij toe aan de tabel
-        addressListElement.appendChild(row);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${address.name}</td>
+            <td>${address.address}</td>
+            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
+            <td><input type="date" id="date-${index}" onchange="setDeliveryDate(${index})"></td>
+        `;
+        addressListElement.appendChild(tr);
     });
 }
 
-// Functie om alle adressen als bezorgd te markeren
-function markAllAsDelivered() {
-    addresses.forEach(address => {
-        if (!address.delivered) {
-            address.delivered = true;
-            address.deliveryDate = new Date().toLocaleDateString(); // Huidige datum
-        }
-    });
-    renderAddressList();  // Werk de lijst bij
+// Functie om de bezorgstatus van een adres te wijzigen
+function toggleAddress(index) {
+    const checkbox = document.getElementById(`checkbox-${index}`);
+    if (checkbox.checked) {
+        localStorage.setItem(`address-${index}-status`, "bezorgd");
+    } else {
+        localStorage.removeItem(`address-${index}-status");
+    }
 }
+
+// Functie om een bezorgdatum in te stellen
+function setDeliveryDate(index) {
+    const dateInput = document.getElementById(`date-${index}`);
+    const date = dateInput.value;
+    localStorage.setItem(`address-${index}-date`, date);
+}
+
+// Functie om de lijst van adressen bij te werken
+document.addEventListener("DOMContentLoaded", function() {
+    renderAddressList();
+});
