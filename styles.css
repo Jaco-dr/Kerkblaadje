@@ -26,12 +26,14 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    overflow-x: auto; /* Zorg ervoor dat de tabel horizontaal scrollt op kleine schermen */
 }
 
 th, td {
     padding: 12px;
     border: 1px solid #ddd;
     text-align: left;
+    font-size: 16px;
 }
 
 th {
@@ -47,15 +49,50 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    width: 100%;
+    max-width: 300px;
+    display: block;
+    margin: 20px auto;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
+/* Media Query voor mobiele schermen */
 @media screen and (max-width: 600px) {
     .container {
         width: 90%;
         padding: 15px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    table {
+        font-size: 14px; /* Verklein de tekstgrootte voor kleine schermen */
+        overflow-x: scroll; /* Zorg ervoor dat de tabel horizontaal te scrollen is */
+    }
+
+    th, td {
+        padding: 8px; /* Verminder de padding voor mobiele apparaten */
+    }
+
+    /* Knop is nu volledig breed voor mobiele apparaten */
+    button {
+        width: 100%;
+        padding: 14px 0;
+    }
+}
+
+/* Verbetering voor grotere schermen */
+@media screen and (min-width: 601px) {
+    .container {
+        width: 80%;
+    }
+
+    h1 {
+        font-size: 32px;
     }
 }
