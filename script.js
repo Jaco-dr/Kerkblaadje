@@ -13,9 +13,10 @@ function renderAddressList() {
         `;
         addressListElement.appendChild(tr);
 
-        // Zorg ervoor dat de juiste checkbox-status wordt geladen van localStorage
+        // Controleer de status en pas de checkbox aan
         const checkbox = document.getElementById(`checkbox-${index}`);
-        if (localStorage.getItem(`address-${index}-status`) === "bezorgd") {
+        const status = localStorage.getItem(`address-${index}-status`);
+        if (status === "bezorgd") {
             checkbox.checked = true;
         } else {
             checkbox.checked = false;
