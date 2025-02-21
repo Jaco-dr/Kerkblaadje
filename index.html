@@ -3,52 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bezorgroute Planner</title>
+    <title>Routeplanner zonder Google Maps</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
+        #map { height: 500px; width: 100%; }
         body { font-family: Arial, sans-serif; text-align: center; }
-        #map { height: 300px; width: 100%; background: #ddd; margin-bottom: 10px; }
-        ul { list-style: none; padding: 0; }
-        li { padding: 5px; background: #f0f0f0; margin: 5px 0; cursor: pointer; }
-        .done { text-decoration: line-through; color: gray; }
     </style>
 </head>
 <body>
-    <h1>Bezorgroute Planner</h1>
+
+    <h2>Routeplanner zonder Google Maps</h2>
     <button onclick="getLocation()">Gebruik mijn locatie</button>
-    <p id="location">Locatie: Niet bekend</p>
-    
-    <input type="text" id="address" placeholder="Voeg een adres toe">
-    <button onclick="addAddress()">Toevoegen</button>
-    
-    <h3>Te bezorgen adressen:</h3>
-    <ul id="addressList"></ul>
-    
+    <div id="map"></div>
+
     <script>
+        let map = L.map('map').setView([52.3702, 4.8952], 13); // Start in Amsterdam
+
+        // OpenStreetMap Tile Layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
         function getLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    let lat = position.coords.latitude;
-                    let lon = position.coords.longitude;
-                    document.getElementById("location").innerText = `Locatie: ${lat}, ${lon}`;
-                }, function() {
-                    alert("Locatie ophalen mislukt.");
-                });
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
             } else {
-                alert("Geolocatie wordt niet ondersteund door je browser.");
+                alert("Geolocatie wordt niet ondersteund door uw browser.");
             }
         }
 
-        function addAddress() {
-            let addressInput = document.getElementById("address");
-            let address = addressInput.value.trim();
-            if (address) {
-                let li = document.createElement("li");
-                li.innerText = address;
-                li.onclick = function() { this.classList.toggle("done"); };
-                document.getElementById("addressList").appendChild(li);
-                addressInput.value = "";
-            }
+        function showPosition(position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            map.setView([lat, lon], 15);
+            L.marker([lat, lon]).addTo(map).bindPopup("Jouw locatie").openPopup();
+        }
+
+        function showError(error) {
+            alert("Locatie kan niet worden opgehaald: " + error.message);
         }
     </script>
+
 </body>
 </html>
