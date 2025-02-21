@@ -10,6 +10,10 @@
     <div class="container">
         <h1>Kerkblaadjes Bezorgtool</h1>
 
+        <!-- Bestanden uploaden -->
+        <input type="file" id="file-input" accept=".json" />
+        <button onclick="loadJsonFile()">Laad Adressen</button>
+
         <!-- Tabel voor de bezorging -->
         <table id="address-table">
             <thead>
