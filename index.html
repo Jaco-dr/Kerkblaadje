@@ -3,104 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BezorgApp</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    <style>
-        #map { height: 500px; width: 100%; }
-        body { font-family: Arial, sans-serif; text-align: center; }
-        input[type="text"] { width: 80%; padding: 5px; margin: 10px 0; }
-        .address-list { margin-top: 20px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
-        .address-item { margin: 5px 0; }
-        .address-item input { margin-right: 10px; }
-    </style>
+    <title>Krantenwijk Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Krantenwijk Tool</h1>
 
-    <h2>BezorgApp</h2>
-    
-    <!-- Invoerveld voor adressen -->
-    <input type="text" id="addressInput" placeholder="Voer een adres in..." />
-    <button onclick="addAddress()">Adres toevoegen</button>
-    <button onclick="startRoute()">Start route</button>
-    <button onclick="stopRoute()">Stop route</button>
-    
-    <div id="map"></div>
+        <!-- Formulier om adressen toe te voegen -->
+        <div id="add-address" class="address-form">
+            <input type="text" id="address-input" placeholder="Voeg een adres toe..." class="input-field">
+            <button onclick="addAddress()" class="add-btn">Voeg toe</button>
+        </div>
 
-    <!-- Lijst met adressen -->
-    <div class="address-list" id="addressList"></div>
+        <!-- Adreslijst -->
+        <h2>Adreslijst</h2>
+        <ul id="address-list" class="address-list"></ul>
 
-    <script>
-        let map = L.map('map').setView([52.3702, 4.8952], 13); // Start in Amsterdam
-        let markers = [];
-        let geocoder = L.Control.Geocoder.nominatim();
-        let addressList = [];
+        <!-- Timer -->
+        <h2>Timer</h2>
+        <div class="timer-container">
+            <p id="timer" class="timer">Tijd: 00:00</p>
+            <button onclick="startTimer()" class="start-btn">Start</button>
+            <button onclick="stopTimer()" class="stop-btn">Stop</button>
+        </div>
+    </div>
 
-        // OpenStreetMap Tile Layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Functie om een adres toe te voegen
-        function addAddress() {
-            let address = document.getElementById('addressInput').value;
-            let time = new Date().toLocaleTimeString();  // Huidige tijd
-            if (address) {
-                geocoder.geocode(address, function(results) {
-                    if (results.length > 0) {
-                        let latLng = results[0].center;
-                        let marker = L.marker(latLng).addTo(map).bindPopup(`<b>${address}</b><br>${time}`).openPopup();
-                        markers.push([latLng.lat, latLng.lng, address, time, false]);
-                        addAddressToList(address, time);  // Voeg toe aan de lijst
-                        document.getElementById('addressInput').value = ''; // Reset input veld
-                    } else {
-                        alert("Adres niet gevonden!");
-                    }
-                });
-            }
-        }
-
-        // Voeg adres toe aan lijst in HTML
-        function addAddressToList(address, time) {
-            let list = document.getElementById('addressList');
-            let listItem = document.createElement('div');
-            listItem.className = 'address-item';
-            listItem.innerHTML = `
-                <input type="checkbox" onclick="toggleDelivered(this)" />
-                ${address} (Tijd: ${time})
-            `;
-            list.appendChild(listItem);
-        }
-
-        // Functie om aan te geven dat een adres is bezorgd
-        function toggleDelivered(checkbox) {
-            let index = Array.from(checkbox.parentNode.parentNode.children).indexOf(checkbox.parentNode);
-            markers[index][4] = checkbox.checked;
-        }
-
-        // Start route
-        function startRoute() {
-            if (markers.length === 0) {
-                alert("Voeg eerst adressen toe!");
-                return;
-            }
-            let routeCoords = markers.map(marker => [marker[0], marker[1]]);
-            L.polyline(routeCoords, { color: 'blue', weight: 4 }).addTo(map);
-            map.fitBounds(L.polyline(routeCoords).getBounds());  // Zoom in op de route
-            alert("Route gestart!");
-        }
-
-        // Stop route (gewoon de polyline verwijderen)
-        function stopRoute() {
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Polyline) {
-                    map.removeLayer(layer);
-                }
-            });
-            alert("Route gestopt!");
-        }
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
