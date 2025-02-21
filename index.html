@@ -3,147 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krantenwijk App</title>
+    <title>Bezorgroute Planner</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            width: 90%;
-            max-width: 900px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            font-size: 24px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .address-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .address-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-        }
-        .address-item.done {
-            text-decoration: line-through;
-            color: gray;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #map { height: 300px; width: 100%; background: #ddd; margin-bottom: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { padding: 5px; background: #f0f0f0; margin: 5px 0; cursor: pointer; }
+        .done { text-decoration: line-through; color: gray; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Krantenwijk App</h1>
-    <input type="text" id="startAddress" placeholder="Voer je startadres in" />
-    <input type="text" id="newAddress" placeholder="Nieuw adres toevoegen" />
-    <button onclick="addAddress()">Voeg adres toe</button>
-
-    <h2>Adreslijst</h2>
-    <ul id="addressList" class="address-list"></ul>
-
-    <button onclick="calculateRoute()">Bereken route</button>
-
-    <div id="map" style="height: 400px; margin-top: 20px;"></div>
-</div>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap&libraries=directions" async defer></script>
-<script>
-    let addresses = [];
-    let map;
-    let directionsService;
-    let directionsRenderer;
-
-    function addAddress() {
-        const address = document.getElementById('newAddress').value.trim();
-        if (address) {
-            addresses.push({ text: address, delivered: false });
-            document.getElementById('newAddress').value = '';
-            renderAddresses();
-        }
-    }
-
-    function toggleDelivered(index) {
-        addresses[index].delivered = !addresses[index].delivered;
-        renderAddresses();
-    }
-
-    function renderAddresses() {
-        const addressList = document.getElementById('addressList');
-        addressList.innerHTML = '';
-        addresses.forEach((address, index) => {
-            const listItem = document.createElement('li');
-            listItem.className = `address-item ${address.delivered ? 'done' : ''}`;
-            listItem.innerHTML = `
-                <span>${address.text}</span>
-                <button onclick="toggleDelivered(${index})">${address.delivered ? 'Afvinken' : 'Markeer als bezorgd'}</button>
-            `;
-            addressList.appendChild(listItem);
-        });
-    }
-
-    function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 14,
-            center: { lat: 52.3676, lng: 4.9041 }
-        });
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
-    }
-
-    function calculateRoute() {
-        const startAddress = document.getElementById('startAddress').value.trim();
-        if (!startAddress || addresses.length < 2) {
-            alert('Voer een startadres in en voeg minimaal 2 adressen toe!');
-            return;
-        }
-
-        const waypoints = addresses.map(addr => ({
-            location: addr.text,
-            stopover: true
-        }));
-
-        const request = {
-            origin: startAddress,
-            destination: startAddress,
-            waypoints: waypoints,
-            optimizeWaypoints: true,
-            travelMode: google.maps.TravelMode.DRIVING
-        };
-
-        directionsService.route(request, (result, status) => {
-            if (status === google.maps.DirectionsStatus.OK) {
-                directionsRenderer.setDirections(result);
+    <h1>Bezorgroute Planner</h1>
+    <button onclick="getLocation()">Gebruik mijn locatie</button>
+    <p id="location">Locatie: Niet bekend</p>
+    
+    <input type="text" id="address" placeholder="Voeg een adres toe">
+    <button onclick="addAddress()">Toevoegen</button>
+    
+    <h3>Te bezorgen adressen:</h3>
+    <ul id="addressList"></ul>
+    
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+                    document.getElementById("location").innerText = `Locatie: ${lat}, ${lon}`;
+                }, function() {
+                    alert("Locatie ophalen mislukt.");
+                });
             } else {
-                alert('Routeberekening mislukt: ' + status);
+                alert("Geolocatie wordt niet ondersteund door je browser.");
             }
-        });
-    }
-</script>
+        }
 
+        function addAddress() {
+            let addressInput = document.getElementById("address");
+            let address = addressInput.value.trim();
+            if (address) {
+                let li = document.createElement("li");
+                li.innerText = address;
+                li.onclick = function() { this.classList.toggle("done"); };
+                document.getElementById("addressList").appendChild(li);
+                addressInput.value = "";
+            }
+        }
+    </script>
 </body>
 </html>
