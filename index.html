@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Routeplanner voor Krantenwijk</title>
+    <title>BezorgApp</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
@@ -11,88 +11,95 @@
         #map { height: 500px; width: 100%; }
         body { font-family: Arial, sans-serif; text-align: center; }
         input[type="text"] { width: 80%; padding: 5px; margin: 10px 0; }
+        .address-list { margin-top: 20px; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .address-item { margin: 5px 0; }
+        .address-item input { margin-right: 10px; }
     </style>
 </head>
 <body>
 
-    <h2>Routeplanner voor Krantenwijk</h2>
+    <h2>BezorgApp</h2>
     
-    <input type="text" id="addressInput" placeholder="Voer een adres in...">
-    <button onclick="geocodeAddress()">Adres toevoegen</button>
-    <button onclick="calculateOptimizedRoute()">Bereken geoptimaliseerde route</button>
-    <button onclick="saveRoute()">💾 Opslaan</button>
-    <button onclick="loadRoute()">📂 Laden</button>
+    <!-- Invoerveld voor adressen -->
+    <input type="text" id="addressInput" placeholder="Voer een adres in..." />
+    <button onclick="addAddress()">Adres toevoegen</button>
+    <button onclick="startRoute()">Start route</button>
+    <button onclick="stopRoute()">Stop route</button>
     
     <div id="map"></div>
+
+    <!-- Lijst met adressen -->
+    <div class="address-list" id="addressList"></div>
 
     <script>
         let map = L.map('map').setView([52.3702, 4.8952], 13); // Start in Amsterdam
         let markers = [];
-        let routeLayer;
+        let geocoder = L.Control.Geocoder.nominatim();
+        let addressList = [];
 
         // OpenStreetMap Tile Layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        let geocoder = L.Control.Geocoder.nominatim(); // Geocoder setup
-
-        function geocodeAddress() {
+        // Functie om een adres toe te voegen
+        function addAddress() {
             let address = document.getElementById('addressInput').value;
-            geocoder.geocode(address, function(results) {
-                if (results.length > 0) {
-                    let latLng = results[0].center;
-                    let marker = L.marker(latLng).addTo(map).bindPopup(address).openPopup();
-                    markers.push([latLng.lat, latLng.lng]);
-                } else {
-                    alert("Adres niet gevonden!");
-                }
-            });
+            let time = new Date().toLocaleTimeString();  // Huidige tijd
+            if (address) {
+                geocoder.geocode(address, function(results) {
+                    if (results.length > 0) {
+                        let latLng = results[0].center;
+                        let marker = L.marker(latLng).addTo(map).bindPopup(`<b>${address}</b><br>${time}`).openPopup();
+                        markers.push([latLng.lat, latLng.lng, address, time, false]);
+                        addAddressToList(address, time);  // Voeg toe aan de lijst
+                        document.getElementById('addressInput').value = ''; // Reset input veld
+                    } else {
+                        alert("Adres niet gevonden!");
+                    }
+                });
+            }
         }
 
-        function calculateOptimizedRoute() {
-            if (markers.length < 2) {
-                alert("Voeg minstens twee locaties toe.");
+        // Voeg adres toe aan lijst in HTML
+        function addAddressToList(address, time) {
+            let list = document.getElementById('addressList');
+            let listItem = document.createElement('div');
+            listItem.className = 'address-item';
+            listItem.innerHTML = `
+                <input type="checkbox" onclick="toggleDelivered(this)" />
+                ${address} (Tijd: ${time})
+            `;
+            list.appendChild(listItem);
+        }
+
+        // Functie om aan te geven dat een adres is bezorgd
+        function toggleDelivered(checkbox) {
+            let index = Array.from(checkbox.parentNode.parentNode.children).indexOf(checkbox.parentNode);
+            markers[index][4] = checkbox.checked;
+        }
+
+        // Start route
+        function startRoute() {
+            if (markers.length === 0) {
+                alert("Voeg eerst adressen toe!");
                 return;
             }
-
-            let apiKey = "JOUW_OPENROUTESERVICE_API_SLEUTEL"; // Vervang met je OpenRouteService API-sleutel
-
-            let waypoints = markers.map(marker => `${marker[1]},${marker[0]}`).join('|');
-
-            // Route optimaliseren met OpenRouteService API
-            let url = `https://api.openrouteservice.org/v2/optimization/vrp?api_key=${apiKey}&locations=${waypoints}&vehicle_type=car&metrics=distance,duration`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (routeLayer) {
-                        map.removeLayer(routeLayer);
-                    }
-
-                    let routeCoords = data.routes[0].segments.map(segment => [segment.start_location[1], segment.start_location[0]]);
-                    routeLayer = L.polyline(routeCoords, { color: 'blue', weight: 4 }).addTo(map);
-                    alert("Geoptimaliseerde route berekend!");
-                })
-                .catch(error => console.error("Fout bij het ophalen van route:", error));
+            let routeCoords = markers.map(marker => [marker[0], marker[1]]);
+            L.polyline(routeCoords, { color: 'blue', weight: 4 }).addTo(map);
+            map.fitBounds(L.polyline(routeCoords).getBounds());  // Zoom in op de route
+            alert("Route gestart!");
         }
 
-        function saveRoute() {
-            localStorage.setItem("savedMarkers", JSON.stringify(markers));
-            alert("Route opgeslagen!");
+        // Stop route (gewoon de polyline verwijderen)
+        function stopRoute() {
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
+            alert("Route gestopt!");
         }
-
-        function loadRoute() {
-            let saved = localStorage.getItem("savedMarkers");
-            if (saved) {
-                markers = JSON.parse(saved);
-                markers.forEach(coord => L.marker(coord).addTo(map));
-                alert("Route geladen!");
-            } else {
-                alert("Geen opgeslagen route gevonden.");
-            }
-        }
-
     </script>
 
 </body>
