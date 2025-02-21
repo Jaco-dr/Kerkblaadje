@@ -2,9 +2,16 @@
 function loadJsonFromGitHub() {
     const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';  // URL naar het JSON-bestand
 
+    // Haal het JSON-bestand op via fetch
     fetch(url)
-        .then(response => response.json()) // Zet de response om naar JSON
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Netwerkfout: " + response.statusText);
+            }
+            return response.json();  // Zet de response om naar JSON
+        })
         .then(addresses => {
+            console.log(addresses); // Debug: Controleer of de JSON correct wordt opgehaald
             renderAddressList(addresses); // Roep de functie aan om de adressen weer te geven
         })
         .catch(error => {
@@ -16,7 +23,11 @@ function loadJsonFromGitHub() {
 // Functie om de lijst van adressen weer te geven
 function renderAddressList(addresses) {
     const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = ''; // Maak de lijst leeg
+    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
+
+    if (addresses.length === 0) {
+        console.log("Geen adressen gevonden in de JSON.");  // Debug: Geen adressen in de JSON
+    }
 
     // Loop door de adressen en voeg ze toe aan de tabel
     addresses.forEach((address, index) => {
@@ -42,5 +53,6 @@ function toggleAddress(index) {
 
 // Zorg ervoor dat de JSON-bestanden geladen worden zodra de pagina klaar is
 document.addEventListener("DOMContentLoaded", function() {
+    console.log("Pagina geladen, start met het ophalen van de JSON..."); // Debug: Controleer wanneer de pagina geladen is
     loadJsonFromGitHub();
 });
