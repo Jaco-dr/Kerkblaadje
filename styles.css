@@ -1,93 +1,51 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
+    margin: 20px;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.form {
+form {
     display: flex;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 #adresInput {
-    flex-grow: 1;
+    width: 70%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    margin-right: 5px;
 }
 
-#addAdresBtn {
+button {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-left: 5px;
-    cursor: pointer;
-}
-
-#addAdresBtn:hover {
-    background-color: #f0f0f0;
 }
 
 ul {
     list-style-type: none;
-    margin-bottom: 20px;
+    padding: 0;
 }
 
 li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-li input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.timer {
-    text-align: center;
-}
-
-#startBtn, #stopBtn {
+    background: #fff;
+    margin: 5px 0;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px;
     cursor: pointer;
-    margin: 5px;
 }
 
-#startBtn:hover, #stopBtn:hover {
-    background-color: #f0f0f0;
-}
-
-#stopBtn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-#timeDisplay {
-    margin-top: 10px;
-    font-size: 1.5em;
+li button:hover {
+    background: darkred;
 }
