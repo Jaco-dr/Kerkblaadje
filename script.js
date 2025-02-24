@@ -33,15 +33,27 @@ function toggleAddress(index) {
     }
 }
 
-// Functie om alle checkboxen te resetten
 function resetCheckboxes() {
+    console.log("Resetknop is geklikt!"); // Debugging: controleer of de functie wordt aangeroepen
+    
+    // Zorg ervoor dat addresses gevuld is voordat we het proberen te resetten
+    if (!addresses || addresses.length === 0) {
+        console.error("Adressenlijst is leeg of niet geladen.");
+        return;
+    }
+
     addresses.forEach((_, index) => {
         const checkbox = document.getElementById(`checkbox-${index}`);
         if (checkbox) {
             checkbox.checked = false;  // Zet de checkbox uit
+            console.log(`Checkbox ${index} uitgeschakeld.`); // Debugging
+        } else {
+            console.warn(`Checkbox ${index} niet gevonden.`); // Debugging
         }
         localStorage.removeItem(`address-${index}-status`);  // Verwijder de status uit localStorage
     });
+
+    console.log("Alle adressen gereset.");
 }
 
 // Functie om het JSON-bestand van GitHub te laden
