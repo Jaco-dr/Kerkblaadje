@@ -1,5 +1,8 @@
+let addresses = []; // Maak een globale variabele aan om adressen op te slaan
+
 // Functie om de lijst van adressen weer te geven
-function renderAddressList(addresses) {
+function renderAddressList(data) {
+    addresses = data; // Sla de adressen op in de globale variabele
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
@@ -16,11 +19,7 @@ function renderAddressList(addresses) {
         // Controleer de status en pas de checkbox aan
         const checkbox = document.getElementById(`checkbox-${index}`);
         const status = localStorage.getItem(`address-${index}-status`);
-        if (status === "bezorgd") {
-            checkbox.checked = true;
-        } else {
-            checkbox.checked = false;
-        }
+        checkbox.checked = (status === "bezorgd");
     });
 }
 
@@ -36,24 +35,22 @@ function toggleAddress(index) {
 
 // Functie om alle checkboxen te resetten
 function resetCheckboxes() {
-    // Loop door alle adressen en zet de checkboxen terug naar niet bezorgd
-    addresses.forEach((address, index) => {
+    addresses.forEach((_, index) => {
         const checkbox = document.getElementById(`checkbox-${index}`);
-        checkbox.checked = false;  // Zet de checkbox uit
+        if (checkbox) {
+            checkbox.checked = false;  // Zet de checkbox uit
+        }
         localStorage.removeItem(`address-${index}-status`);  // Verwijder de status uit localStorage
     });
 }
 
 // Functie om het JSON-bestand van GitHub te laden
 function loadAddresses() {
-    // Vervang de URL met de juiste link naar jouw raw JSON-bestand op GitHub
     const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
 
-    // Haal het JSON-bestand op met fetch
     fetch(url)
-        .then(response => response.json())  // Zet de response om naar JSON
+        .then(response => response.json())
         .then(data => {
-            // Zodra we de data hebben, roepen we renderAddressList aan om de adressen weer te geven
             renderAddressList(data);
         })
         .catch(error => {
@@ -63,5 +60,8 @@ function loadAddresses() {
 
 // Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
 document.addEventListener("DOMContentLoaded", function() {
-    loadAddresses();  // Roep de functie aan om de adressen te laden
+    loadAddresses();  
+
+    // Reset-knop functionaliteit toevoegen
+    document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
 });
