@@ -1,13 +1,16 @@
 let addresses = []; // Lijst om adressen op te slaan
 
-// Functie om de lijst van adressen weer te geven
 function renderAddressList(data) {
-    addresses = data; // Sla de adressen op in de globale variabele
     const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
+    addressListElement.innerHTML = '';  // Maak de lijst leeg voordat we nieuwe data toevoegen
+
+    if (!data || data.length === 0) {
+        addressListElement.innerHTML = "<tr><td colspan='3'>Geen adressen beschikbaar.</td></tr>";
+        return;  // Als er geen data is, stop de functie
+    }
 
     // Loop door de adressen en voeg ze toe aan de tabel
-    addresses.forEach((address, index) => {
+    data.forEach((address, index) => {
         const tr = document.createElement("tr");
         tr.id = `row-${index}`;
         tr.innerHTML = `
@@ -17,11 +20,11 @@ function renderAddressList(data) {
         `;
         addressListElement.appendChild(tr);
 
-        // Controleer de status van het adres in localStorage
+        // Controleer de bezorgstatus in localStorage
         const status = localStorage.getItem(`address-${index}-status`);
         if (status === "bezorgd") {
             document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none"; // Verberg het adres als het bezorgd is
+            tr.style.display = "none";  // Verberg het adres als het al bezorgd is
         }
     });
 }
@@ -40,19 +43,19 @@ function toggleAddress(index) {
     }
 }
 
-// Functie om de adressen van GitHub op te halen
 function loadAddresses() {
     const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            renderAddressList(data); // Render de adressen in de bezorglijst
+            console.log("Data geladen:", data);  // Log de geladen data
+            renderAddressList(data);  // Render de adressen in de bezorglijst
         })
         .catch(error => {
             console.error('Er is een fout opgetreden bij het ophalen van de adressen:', error);
         });
-}
+
 
 // Functie om nieuwe adressen toe te voegen
 function addAddress() {
