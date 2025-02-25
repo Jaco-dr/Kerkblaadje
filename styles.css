@@ -8,44 +8,30 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
 /* Container met afgeronde hoeken en zachte schaduw */
 .container {
     width: 100%;
-    max-width: 1000px;
-    margin: 20px auto;
+    max-width: 1200px; /* Maximaliseer de breedte op grotere schermen */
+    margin: 20px;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 20px; /* Zeer ronde hoeken */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0; /* Subtiele rand voor meer definitie */
+    border: 1px solid #e0e0e0;
+    overflow-x: auto; /* Voeg horizontale scroll toe bij nodig */
 }
 
-/* Koptekst */
-h1, h2 {
-    text-align: center;
-    color: #333;
-}
-
-h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 28px;
-    color: #4CAF50; /* Groen accent voor de Bezorglijst */
-    margin-bottom: 10px;
-}
-
-/* Tabbladen met kleuren en zachtere randen */
+/* Tabbladen */
 .tab-header {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     border-radius: 15px;
-    background-color: #f9f9f9; /* Lichte achtergrondkleur */
+    background-color: #f9f9f9;
+    width: 100%;
 }
 
 .tab-header div {
@@ -57,13 +43,52 @@ h2 {
     font-size: 18px;
     font-weight: bold;
     color: #555;
-    transition: background-color 0.3s, transform 0.3s;
+    flex: 1; /* Zorg ervoor dat de tabbladen zich gelijkmatig over de breedte verdelen */
+    text-align: center;
 }
 
 .tab-header div.active {
     background-color: #4CAF50;
     color: white;
-    transform: scale(1.05); /* Subtiele vergroting voor de actieve tab */
+}
+
+/* Tabblad inhoud */
+.tab-content {
+    display: none;
+    width: 100%; /* Zorg ervoor dat de inhoud zich over het hele scherm uitstrekt */
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Contextmenu stijl */
+.context-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 150px;
+    z-index: 10;
+}
+
+.context-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #555;
+}
+
+.context-menu li:hover {
+    background-color: #f2f2f2;
 }
 
 /* Tabelstijl */
@@ -71,7 +96,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    overflow-x: auto;
+    overflow-x: auto; /* Zorg ervoor dat de tabel horizontaal scrollt op kleine schermen */
 }
 
 th, td {
@@ -79,93 +104,63 @@ th, td {
     border: 1px solid #ddd;
     text-align: left;
     font-size: 16px;
-    color: #555;
-    background-color: #fafafa; /* Lichtgrijze achtergrond voor cellen */
 }
 
 th {
     background-color: #f1f1f1;
-    font-weight: bold;
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Knopstijl met zachte hoeken en accentkleuren */
+/* Knopstijl */
 button {
     background-color: #4CAF50;
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 15px; /* Zachte afgeronde hoeken */
+    border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
     display: block;
     margin: 20px auto;
     width: 100%;
-    max-width: 300px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
-/* Invoer Velden met ronde hoeken en focus effect */
-input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 15px; /* Ronde hoeken voor invoervelden */
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-    outline: none;
-    border-color: #4CAF50;
+    max-width: 300px; /* Zorgt ervoor dat de knop niet te breed wordt */
 }
 
 /* Media Query voor mobiele schermen */
 @media screen and (max-width: 600px) {
     .container {
-        width: 90%;
+        width: 100%;
         padding: 15px;
     }
 
-    h1 {
-        font-size: 28px;
+    .tab-header div {
+        font-size: 16px;
+        padding: 12px;
     }
 
     table {
-        font-size: 14px;
+        font-size: 14px; /* Verklein de tekstgrootte voor kleine schermen */
+        overflow-x: scroll; /* Zorg ervoor dat de tabel horizontaal te scrollen is */
     }
 
     th, td {
-        padding: 10px;
+        padding: 8px;
     }
 
+    /* Knop is nu volledig breed voor mobiele apparaten */
     button {
         width: 100%;
         padding: 14px 0;
     }
 }
 
-/* Verbetering voor grotere schermen */
+/* Voor grotere schermen met meer ruimte */
 @media screen and (min-width: 601px) {
     .container {
-        width: 85%;
+        width: 80%;
     }
 
-    h1 {
-        font-size: 36px;
+    .tab-header div {
+        font-size: 18px;
+        padding: 15px;
     }
 }
