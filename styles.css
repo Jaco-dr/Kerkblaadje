@@ -1,27 +1,24 @@
 /* Algemene stijl */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7fc;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
 }
 
-/* Container met afgeronde hoeken en zachte schaduw */
 .container {
     width: 100%;
-    max-width: 1200px; /* Maximaliseer de breedte op grotere schermen */
-    margin: 20px;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 20px; /* Zeer ronde hoeken */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0;
-    overflow-x: auto; /* Voeg horizontale scroll toe bij nodig */
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
 }
 
 /* Tabbladen */
@@ -29,66 +26,23 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    border-radius: 15px;
-    background-color: #f9f9f9;
-    width: 100%;
 }
 
-.tab-header div {
-    padding: 15px;
-    background-color: #e0e0e0;
-    margin: 0 10px;
-    border-radius: 10px;
+.tab {
+    padding: 10px 20px;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    color: #555;
-    flex: 1; /* Zorg ervoor dat de tabbladen zich gelijkmatig over de breedte verdelen */
-    text-align: center;
+    background-color: #f0f0f0;
+    margin-right: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
-.tab-header div.active {
-    background-color: #4CAF50;
-    color: white;
+.tab:hover {
+    background-color: #ddd;
 }
 
-/* Tabblad inhoud */
 .tab-content {
     display: none;
-    width: 100%; /* Zorg ervoor dat de inhoud zich over het hele scherm uitstrekt */
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* Contextmenu stijl */
-.context-menu {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    padding: 10px 0;
-    width: 150px;
-    z-index: 10;
-}
-
-.context-menu ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.context-menu li {
-    padding: 8px 15px;
-    cursor: pointer;
-    color: #555;
-}
-
-.context-menu li:hover {
-    background-color: #f2f2f2;
 }
 
 /* Tabelstijl */
@@ -96,71 +50,84 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    overflow-x: auto; /* Zorg ervoor dat de tabel horizontaal scrollt op kleine schermen */
 }
 
 th, td {
-    padding: 15px;
+    padding: 12px;
     border: 1px solid #ddd;
     text-align: left;
-    font-size: 16px;
 }
 
 th {
-    background-color: #f1f1f1;
+    background-color: #f2f2f2;
 }
 
-/* Knopstijl */
 button {
     background-color: #4CAF50;
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 15px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    width: 100%;
+    max-width: 300px;
     display: block;
     margin: 20px auto;
-    width: 100%;
-    max-width: 300px; /* Zorgt ervoor dat de knop niet te breed wordt */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Contextmenu stijl */
+.context-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu ul {
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.context-menu li:hover {
+    background-color: #ddd;
 }
 
 /* Media Query voor mobiele schermen */
 @media screen and (max-width: 600px) {
     .container {
-        width: 100%;
+        width: 90%;
         padding: 15px;
     }
 
-    .tab-header div {
-        font-size: 16px;
-        padding: 12px;
+    h1 {
+        font-size: 24px;
     }
 
     table {
-        font-size: 14px; /* Verklein de tekstgrootte voor kleine schermen */
-        overflow-x: scroll; /* Zorg ervoor dat de tabel horizontaal te scrollen is */
+        font-size: 14px;
     }
 
     th, td {
         padding: 8px;
     }
 
-    /* Knop is nu volledig breed voor mobiele apparaten */
     button {
         width: 100%;
         padding: 14px 0;
-    }
-}
-
-/* Voor grotere schermen met meer ruimte */
-@media screen and (min-width: 601px) {
-    .container {
-        width: 80%;
-    }
-
-    .tab-header div {
-        font-size: 18px;
-        padding: 15px;
     }
 }
