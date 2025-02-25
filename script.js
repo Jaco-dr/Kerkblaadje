@@ -14,7 +14,12 @@ function loadAddresses() {
         });
 }
 
-let addresses = JSON.parse(localStorage.getItem("savedAddresses")) || defaultAddresses;
+// Haal adressen op uit localStorage, anders laad ze van GitHub
+let addresses = JSON.parse(localStorage.getItem("savedAddresses"));
+
+if (!addresses) {
+    loadAddresses(); // Eerste keer ophalen van JSON als er niks in localStorage staat
+}
 
 function renderAddressList() {
     const addressListElement = document.getElementById("address-list");
@@ -88,8 +93,11 @@ function toggleAddress(index) {
 function resetCheckboxes() {
     addresses.forEach((_, index) => {
         localStorage.removeItem(`address-${index}-status`);
-        document.getElementById(`row-${index}`).style.display = "";
-        document.getElementById(`checkbox-${index}`).checked = false;
+        const row = document.getElementById(`row-${index}`);
+        if (row) {
+            row.style.display = "";
+            document.getElementById(`checkbox-${index}`).checked = false;
+        }
     });
 }
 
@@ -98,7 +106,11 @@ function saveAddresses() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    renderAddressList();
-    renderBeheerList();
+    if (!addresses) {
+        loadAddresses(); // JSON ophalen als localStorage leeg is
+    } else {
+        renderAddressList();
+        renderBeheerList();
+    }
     document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
 });
