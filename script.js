@@ -1,15 +1,18 @@
-const defaultAddresses = [
-    { "name": "Mw. van de Broek", "address": "Vermeerlaan 1" },
-    { "name": "Wilmar Hardeman", "address": "Glashorst 46" },
-    { "name": "Fam. Wisse", "address": "Glashorst 68" },
-    { "name": "Fam. de Jager", "address": "Glashorst 70" },
-    { "name": "Fam. Velthuizen", "address": "Pluimenweg 17" },
-    { "name": "Fam. van Ginkel", "address": "Industrielaan 10" },
-    { "name": "Fam. van de Kamp", "address": "Prinsenlaan 42" },
-    { "name": "Fam. den Hartog", "address": "Prinsenlaan 35" },
-    { "name": "Mw. Boer", "address": "Stationsweg 334" },
-    { "name": "Fam. Haanschoten", "address": "Stationsweg 338" }
-];
+function loadAddresses() {
+    const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            addresses = data;
+            saveAddresses(); // Opslaan in localStorage voor caching
+            renderAddressList();
+            renderBeheerList();
+        })
+        .catch(error => {
+            console.error('Fout bij ophalen van adressen:', error);
+        });
+}
 
 let addresses = JSON.parse(localStorage.getItem("savedAddresses")) || defaultAddresses;
 
