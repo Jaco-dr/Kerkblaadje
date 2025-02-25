@@ -10,14 +10,14 @@
 
     <div class="container">
         <h1>Adresbeheer</h1>
-        
-        <!-- Tabbladen -->
+
+        <!-- Tabs -->
         <div class="tab-header">
-            <div id="tab-bezorglijst" class="tab active" onclick="showTab('bezorglijst')">Bezorglijst</div>
-            <div id="tab-beheer" class="tab" onclick="showTab('beheer')">Adres Beheer</div>
+            <button class="tab-button active" onclick="showTab('bezorglijst')">Bezorglijst</button>
+            <button class="tab-button" onclick="showTab('beheer')">Adres Beheer</button>
         </div>
 
-        <!-- Bezorglijst Tab -->
+        <!-- Bezorglijst -->
         <div id="bezorglijst" class="tab-content active">
             <h2>Bezorglijst</h2>
             <table>
@@ -33,7 +33,7 @@
             <button id="reset-button">Reset Bezorgstatus</button>
         </div>
 
-        <!-- Adres Beheer Tab -->
+        <!-- Adresbeheer -->
         <div id="beheer" class="tab-content">
             <h2>Adres Beheer</h2>
             <table>
@@ -46,13 +46,9 @@
                 </thead>
                 <tbody id="beheer-list"></tbody>
             </table>
-            <h3>Nieuw Adres Toevoegen</h3>
-            <input type="text" id="new-name" placeholder="Naam">
-            <input type="text" id="new-address" placeholder="Adres">
-            <button onclick="addAddress()">Toevoegen</button>
         </div>
 
-        <!-- Contextmenu voor adresbeheer -->
+        <!-- Contextmenu voor bewerken en toevoegen -->
         <div id="context-menu" class="context-menu">
             <ul>
                 <li onclick="editAddress()">Adres Bewerken</li>
