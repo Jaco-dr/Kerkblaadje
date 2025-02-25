@@ -1,62 +1,88 @@
-let addresses = []; // Globale variabele om adressen op te slaan
+let addresses = []; // Globale variabele voor adressen
 
 // Functie om de lijst van adressen weer te geven
 function renderAddressList(data) {
-    addresses = data; // Sla adressen op in de globale variabele
+    addresses = data;
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
-        tr.id = `row-${index}`; // Geef de rij een uniek ID
+        tr.id = `row-${index}`;
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
-            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
+            <td><button onclick="openContextMenu(event, ${index})">Acties</button></td>
         `;
         addressListElement.appendChild(tr);
-
-        // Controleer de status en pas de checkbox aan
-        const status = localStorage.getItem(`address-${index}-status`);
-        if (status === "bezorgd") {
-            document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none"; // Verberg de rij als deze al bezorgd was
-        }
     });
 }
 
-// Functie om de bezorgstatus van een adres te wijzigen
-function toggleAddress(index) {
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    const row = document.getElementById(`row-${index}`);
+// Functie om het contextmenu te openen
+function openContextMenu(event, index) {
+    event.preventDefault(); // Voorkom standaard contextmenu
 
-    if (checkbox.checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-        row.style.display = "none"; // Verberg het adres
-    } else {
-        localStorage.removeItem(`address-${index}-status`);
-        row.style.display = ""; // Laat het adres weer zien
-    }
+    const menu = document.createElement('div');
+    menu.id = 'context-menu';
+    menu.style.position = 'absolute';
+    menu.style.top = `${event.pageY}px`;
+    menu.style.left = `${event.pageX}px`;
+    menu.style.background = '#fff';
+    menu.style.border = '1px solid #ccc';
+    menu.style.padding = '10px';
+    menu.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+    menu.style.borderRadius = '8px';
+
+    // Voeg bewerken en verwijderen opties toe
+    const editOption = document.createElement('div');
+    editOption.textContent = 'Bewerk Adres';
+    editOption.style.cursor = 'pointer';
+    editOption.addEventListener('click', () => editAddress(index));
+
+    const deleteOption = document.createElement('div');
+    deleteOption.textContent = 'Verwijder Adres';
+    deleteOption.style.cursor = 'pointer';
+    deleteOption.addEventListener('click', () => removeAddress(index));
+
+    menu.appendChild(editOption);
+    menu.appendChild(deleteOption);
+
+    document.body.appendChild(menu);
+
+    // Verwijder het menu wanneer ergens anders op het scherm geklikt wordt
+    window.addEventListener('click', () => menu.remove(), { once: true });
 }
 
-// Functie om alle adressen terug te zetten en weer te tonen
-function resetCheckboxes() {
-    console.log("Resetknop is geklikt!");
+// Functie om een adres te bewerken
+function editAddress(index) {
+    const address = addresses[index];
+    document.getElementById('edit-name').value = address.name;
+    document.getElementById('edit-address').value = address.address;
 
-    addresses.forEach((_, index) => {
-        const checkbox = document.getElementById(`checkbox-${index}`);
-        const row = document.getElementById(`row-${index}`);
+    // Toon het formulier
+    document.getElementById('edit-form-container').style.display = 'block';
 
-        if (checkbox) {
-            checkbox.checked = false; // Zet de checkbox uit
-        }
-        if (row) {
-            row.style.display = ""; // Laat de rij weer zien
-        }
-        localStorage.removeItem(`address-${index}-status`); // Verwijder de status uit localStorage
-    });
+    // Sla het indexnummer op in het formulier voor later gebruik
+    document.getElementById('save-button').onclick = () => saveAddress(index);
+}
 
-    console.log("Alle adressen zijn weer zichtbaar.");
+// Functie om een adres op te slaan na bewerking
+function saveAddress(index) {
+    const name = document.getElementById('edit-name').value;
+    const address = document.getElementById('edit-address').value;
+
+    // Update het adres in de lijst
+    addresses[index] = { name, address };
+    renderAddressList(addresses);
+
+    // Verberg het formulier
+    document.getElementById('edit-form-container').style.display = 'none';
+}
+
+// Functie om een adres te verwijderen
+function removeAddress(index) {
+    addresses.splice(index, 1);
+    renderAddressList(addresses);
 }
 
 // Functie om het JSON-bestand van GitHub te laden
@@ -76,32 +102,4 @@ function loadAddresses() {
 // Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
 document.addEventListener("DOMContentLoaded", function() {
     loadAddresses();
-
-    // Reset-knop functionaliteit toevoegen
-    document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
-    
-    // Tabbladen logica toevoegen
-    const tabAddresses = document.getElementById("tab-addresses");
-    const tabBeheer = document.getElementById("tab-beheer");
-    const addressesTab = document.getElementById("addresses-tab");
-    const beheerTab = document.getElementById("beheer-tab");
-
-    // Functie om tabbladen weer te geven
-    function showTab(tab) {
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(t => t.classList.remove('active')); // Verberg alle tabbladen
-        tab.classList.add('active'); // Toon het geselecteerde tabblad
-    }
-
-    // Initieer de weergave van het eerste tabblad (Bezorglijst)
-    showTab(addressesTab);
-
-    // Voeg klik-event listeners toe om tussen tabbladen te schakelen
-    tabAddresses.addEventListener("click", function() {
-        showTab(addressesTab);
-    });
-
-    tabBeheer.addEventListener("click", function() {
-        showTab(beheerTab);
-    });
 });
