@@ -1,7 +1,7 @@
 /* Algemene stijl */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7fc;
+    background-color: #e9f5f1; /* Lichte groene achtergrond voor frisheid */
     margin: 0;
     padding: 0;
     display: flex;
@@ -19,7 +19,7 @@ body {
     background-color: #ffffff;
     border-radius: 20px; /* Zeer ronde hoeken */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0; /* Subtiele rand voor meer definitie */
+    border: 1px solid #e0e0e0;
     overflow: hidden;
 }
 
@@ -33,6 +33,7 @@ h1 {
     font-size: 36px;
     margin-bottom: 20px;
     font-weight: 600;
+    color: #2c6a4f; /* Groene kleur voor koppen */
 }
 
 h2 {
@@ -48,13 +49,13 @@ h2 {
     justify-content: center;
     margin-bottom: 20px;
     border-radius: 15px;
-    background-color: #f9f9f9; /* Lichte achtergrondkleur */
+    background-color: #f0f8f5; /* Lichte aquablauwe achtergrond voor tabbladen */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tab-header div {
     padding: 15px;
-    background-color: #e0e0e0;
+    background-color: #c6e8e1; /* Pastelgroen-grijs voor inactieve tabbladen */
     margin: 0 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -72,7 +73,7 @@ h2 {
 }
 
 .tab-header div:hover {
-    background-color: #388e3c; /* Donkergroene hover kleur */
+    background-color: #388e3c; /* Donkergroene hoverkleur */
 }
 
 /* Tabelstijl */
@@ -81,7 +82,7 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     overflow-x: auto;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); /* Schaduw voor tabel */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 th, td {
@@ -113,7 +114,7 @@ button {
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 15px; /* Zachte afgeronde hoeken */
+    border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
     display: block;
@@ -126,7 +127,7 @@ button {
 button:hover {
     background-color: #45a049;
     transform: scale(1.05);
-    box-shadow: 0px 4px 15px rgba(72, 172, 68, 0.5); /* Schaduw op hover */
+    box-shadow: 0px 4px 15px rgba(72, 172, 68, 0.5);
 }
 
 /* Invoer Velden met ronde hoeken en focus effect */
@@ -135,7 +136,7 @@ input[type="text"] {
     padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 15px; /* Ronde hoeken voor invoervelden */
+    border-radius: 15px;
     margin-bottom: 20px;
     box-sizing: border-box;
     transition: border-color 0.3s, box-shadow 0.3s;
