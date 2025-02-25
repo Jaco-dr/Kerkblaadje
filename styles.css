@@ -1,6 +1,5 @@
-/* Algemene stijl */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background-color: #f4f7fc;
     margin: 0;
     padding: 0;
@@ -10,16 +9,18 @@ body {
     height: 100vh;
 }
 
-/* Container met afgeronde hoeken en zachte schaduw */
 .container {
-    width: 100%;
+    width: 90%;
     max-width: 1000px;
-    margin: 20px auto;
-    padding: 30px;
     background-color: #ffffff;
-    border-radius: 20px; /* Zeer ronde hoeken */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e0e0e0; /* Subtiele rand voor meer definitie */
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
 }
 
 /* Tabbladen */
@@ -27,45 +28,48 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    border-radius: 15px;
-    background-color: #f9f9f9;
+    border-bottom: 2px solid #ccc;
 }
 
-.tab-header div {
-    padding: 15px;
-    background-color: #e0e0e0;
-    margin: 0 10px;
-    border-radius: 10px;
+.tab {
+    padding: 15px 20px;
     cursor: pointer;
     font-size: 18px;
-    font-weight: bold;
     color: #555;
 }
 
-.tab-header div.active {
-    background-color: #4CAF50;
-    color: white;
+.tab.active {
+    border-bottom: 3px solid #4CAF50;
+    font-weight: bold;
+    color: #000;
 }
 
-/* Tabblad inhoud */
-.tab-content {
-    display: none;
+/* Tabelstijl */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
 }
 
-.tab-content.active {
-    display: block;
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
-/* Contextmenu stijl */
+th {
+    background-color: #f1f1f1;
+}
+
+/* Contextmenu */
 .context-menu {
     display: none;
     position: absolute;
-    background-color: #fff;
+    background-color: white;
     border: 1px solid #ccc;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
     border-radius: 10px;
-    padding: 10px 0;
-    width: 150px;
     z-index: 10;
 }
 
@@ -83,47 +87,4 @@ body {
 
 .context-menu li:hover {
     background-color: #f2f2f2;
-}
-
-/* Tabelstijl */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-th, td {
-    padding: 15px;
-    border: 1px solid #ddd;
-    text-align: left;
-    font-size: 16px;
-}
-
-th {
-    background-color: #f1f1f1;
-}
-
-/* Knopstijl */
-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 16px;
-    display: block;
-    margin: 20px auto;
-}
-
-/* Media Query voor mobiele schermen */
-@media screen and (max-width: 600px) {
-    .container {
-        width: 90%;
-        padding: 15px;
-    }
-
-    button {
-        width: 100%;
-    }
 }
