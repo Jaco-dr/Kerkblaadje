@@ -22,30 +22,13 @@ body {
     border: 1px solid #e0e0e0; /* Subtiele rand voor meer definitie */
 }
 
-/* Koptekst */
-h1, h2 {
-    text-align: center;
-    color: #333;
-}
-
-h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 28px;
-    color: #4CAF50; /* Groen accent voor de Bezorglijst */
-    margin-bottom: 10px;
-}
-
-/* Tabbladen met kleuren en zachtere randen */
+/* Tabbladen */
 .tab-header {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     border-radius: 15px;
-    background-color: #f9f9f9; /* Lichte achtergrondkleur */
+    background-color: #f9f9f9;
 }
 
 .tab-header div {
@@ -57,13 +40,49 @@ h2 {
     font-size: 18px;
     font-weight: bold;
     color: #555;
-    transition: background-color 0.3s, transform 0.3s;
 }
 
 .tab-header div.active {
     background-color: #4CAF50;
     color: white;
-    transform: scale(1.05); /* Subtiele vergroting voor de actieve tab */
+}
+
+/* Tabblad inhoud */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Contextmenu stijl */
+.context-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 150px;
+    z-index: 10;
+}
+
+.context-menu ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu li {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: #555;
+}
+
+.context-menu li:hover {
+    background-color: #f2f2f2;
 }
 
 /* Tabelstijl */
@@ -71,7 +90,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    overflow-x: auto;
 }
 
 th, td {
@@ -79,59 +97,23 @@ th, td {
     border: 1px solid #ddd;
     text-align: left;
     font-size: 16px;
-    color: #555;
-    background-color: #fafafa; /* Lichtgrijze achtergrond voor cellen */
 }
 
 th {
     background-color: #f1f1f1;
-    font-weight: bold;
 }
 
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Knopstijl met zachte hoeken en accentkleuren */
+/* Knopstijl */
 button {
     background-color: #4CAF50;
     color: white;
     border: none;
     padding: 12px 24px;
-    border-radius: 15px; /* Zachte afgeronde hoeken */
+    border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
     display: block;
     margin: 20px auto;
-    width: 100%;
-    max-width: 300px;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
-/* Invoer Velden met ronde hoeken en focus effect */
-input[type="text"] {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 15px; /* Ronde hoeken voor invoervelden */
-    margin-bottom: 20px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-    outline: none;
-    border-color: #4CAF50;
 }
 
 /* Media Query voor mobiele schermen */
@@ -141,31 +123,7 @@ input[type="text"]:focus {
         padding: 15px;
     }
 
-    h1 {
-        font-size: 28px;
-    }
-
-    table {
-        font-size: 14px;
-    }
-
-    th, td {
-        padding: 10px;
-    }
-
     button {
         width: 100%;
-        padding: 14px 0;
-    }
-}
-
-/* Verbetering voor grotere schermen */
-@media screen and (min-width: 601px) {
-    .container {
-        width: 85%;
-    }
-
-    h1 {
-        font-size: 36px;
     }
 }
