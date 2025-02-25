@@ -4,42 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adresbeheer</title>
+    <style>
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+
+        .tabs button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Bezorglijst -->
-    <h2>Bezorglijst</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Adres</th>
-                <th>Bezorgd</th>
-            </tr>
-        </thead>
-        <tbody id="address-list"></tbody>
-    </table>
-    <button id="reset-button">Reset Bezorgstatus</button>
+    <!-- Tabbladen -->
+    <div class="tabs">
+        <button id="tab-addresses">Bezorglijst</button>
+        <button id="tab-beheer">Adres Beheer</button>
+    </div>
 
-    <hr>
+    <!-- Bezorglijst Tabblad -->
+    <div id="addresses-tab" class="tab-content">
+        <h2>Bezorglijst</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Bezorgd</th>
+                </tr>
+            </thead>
+            <tbody id="address-list"></tbody>
+        </table>
+        <button id="reset-button">Reset Bezorgstatus</button>
+    </div>
 
-    <!-- Beheer Tabblad -->
-    <h2>Adres Beheer</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Adres</th>
-                <th>Actie</th>
-            </tr>
-        </thead>
-        <tbody id="beheer-list"></tbody>
-    </table>
+    <!-- Adres Beheer Tabblad -->
+    <div id="beheer-tab" class="tab-content">
+        <h2>Adres Beheer</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Actie</th>
+                </tr>
+            </thead>
+            <tbody id="beheer-list"></tbody>
+        </table>
 
-    <h3>Nieuw Adres Toevoegen</h3>
-    <input type="text" id="new-name" placeholder="Naam">
-    <input type="text" id="new-address" placeholder="Adres">
-    <button onclick="addAddress()">Toevoegen</button>
+        <h3>Nieuw Adres Toevoegen</h3>
+        <input type="text" id="new-name" placeholder="Naam">
+        <input type="text" id="new-address" placeholder="Adres">
+        <button onclick="addAddress()">Toevoegen</button>
+    </div>
 
     <script src="script.js"></script> <!-- Zorg dat deze verwijst naar je JavaScript-bestand -->
 
