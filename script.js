@@ -1,13 +1,11 @@
-let addresses = []; // Globale variabele
-
 document.addEventListener("DOMContentLoaded", function() {
     loadAddresses();
 
-    // Reset-knop functionaliteit
+    // Reset-knop functionaliteit toevoegen
     document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
 });
 
-// Wisselen tussen tabbladen
+// Tabblad wisselen
 function showTab(tabName) {
     document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
     document.querySelectorAll(".tab-button").forEach(button => button.classList.remove("active"));
@@ -16,7 +14,7 @@ function showTab(tabName) {
     document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add("active");
 }
 
-// Adressen laden uit JSON
+// Laden van JSON
 function loadAddresses() {
     fetch('https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json')
         .then(response => response.json())
@@ -43,14 +41,7 @@ function renderList(listId, isEditable) {
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
-            ${isEditable ? 
-                `<td>
-                    <button onclick="editAddress(${index})">✏️</button>
-                    <button onclick="removeAddress(${index})">❌</button>
-                </td>` 
-                : 
-                `<td><input type="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>`
-            }
+            ${isEditable ? '<td><button onclick="editAddress(' + index + ')">✏️</button></td>' : '<td><input type="checkbox" id="checkbox-' + index + '" onclick="toggleAddress(' + index + ')"></td>'}
         `;
         listElement.appendChild(tr);
     });
@@ -72,37 +63,4 @@ function editAddress(index) {
 function removeAddress(index) {
     addresses.splice(index, 1);
     renderLists();
-}
-
-// Adres toevoegen
-function addAddress() {
-    const name = document.getElementById("new-name").value;
-    const address = document.getElementById("new-address").value;
-
-    if (name && address) {
-        addresses.push({ name, address });
-        renderLists();
-        document.getElementById("new-name").value = "";
-        document.getElementById("new-address").value = "";
-    } else {
-        alert("Vul zowel een naam als een adres in.");
-    }
-}
-
-// Checkbox status opslaan
-function toggleAddress(index) {
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    if (checkbox.checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-    } else {
-        localStorage.removeItem(`address-${index}-status`);
-    }
-}
-
-// Checkbox resetten
-function resetCheckboxes() {
-    addresses.forEach((_, index) => {
-        localStorage.removeItem(`address-${index}-status`);
-        document.getElementById(`checkbox-${index}`).checked = false;
-    });
 }
