@@ -1,19 +1,8 @@
-// Variabele voor het opslaan van adressen
-let addresses = [];
-
-// Functie om de adressen van het JSON-bestand in te laden
-function loadAddresses() {
-    fetch('adressen.json') // Dit is het bestand waar de adressen vandaan komen
-        .then(response => response.json()) // Zet de response om naar JSON
-        .then(data => {
-            addresses = data; // Zet de geladen data in de 'addresses' array
-            displayAddresses(); // Toon de adressen in de Bezorglijst
-            displayBeheer(); // Toon de adressen in het Beheer tabblad
-        })
-        .catch(error => {
-            console.error('Er is een fout opgetreden bij het laden van de adressen:', error);
-        });
-}
+// Array om de adressen op te slaan
+let addresses = [
+    { name: 'Jan Jansen', address: 'Straatweg 12', delivered: false },
+    { name: 'Piet de Vries', address: 'Laan 34', delivered: true }
+];
 
 // Functie om adressen in de Bezorglijst weer te geven
 function displayAddresses() {
@@ -105,5 +94,6 @@ document.getElementById('tab-beheer').addEventListener('click', () => {
     document.getElementById('tab-addresses').classList.remove('active');
 });
 
-// Laad de adressen bij het openen van de pagina
-window.onload = loadAddresses;
+// Initieel de adressen weergeven
+displayAddresses();
+displayBeheer();
