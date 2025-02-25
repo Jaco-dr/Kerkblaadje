@@ -1,6 +1,6 @@
 let addresses = []; // Globale variabele om adressen op te slaan
 
-// Functie om tabbladen te tonen
+// Functie om tabbladen te tonen en het actieve tabblad bij te werken
 function showTab(tabName) {
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => tab.style.display = 'none');
@@ -8,10 +8,12 @@ function showTab(tabName) {
     const activeTab = document.getElementById(tabName);
     activeTab.style.display = 'block';
     
-    const activeTabHeader = document.querySelectorAll('.tab');
-    activeTabHeader.forEach(tab => tab.style.backgroundColor = '#f0f0f0');
-    
-    document.getElementById('tab-' + tabName).style.backgroundColor = '#ddd';
+    // Verwijder de actieve klasse van alle tabbladen
+    const tabHeaders = document.querySelectorAll('.tab');
+    tabHeaders.forEach(tab => tab.classList.remove('active'));
+
+    // Voeg de actieve klasse toe aan het geselecteerde tabblad
+    document.getElementById('tab-' + tabName).classList.add('active');
 }
 
 // Functie om de lijst van adressen weer te geven
