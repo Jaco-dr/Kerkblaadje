@@ -1,8 +1,9 @@
 let addresses = []; // Globale variabele om adressen op te slaan
+let selectedAddressIndex = null; // Houdt het geselecteerde adres bij voor bewerken of verwijderen
 
-// Functie om de lijst van adressen weer te geven op het bezorglijst-tabblad
+// Functie om de lijst van adressen weer te geven
 function renderAddressList(data) {
-    addresses = data; // Sla de adressen op
+    addresses = data;
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
@@ -12,51 +13,45 @@ function renderAddressList(data) {
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
-            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
+            <td><input type="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
         `;
+        tr.addEventListener("contextmenu", (event) => showContextMenu(event, index)); // Rechtsklikken
         addressListElement.appendChild(tr);
-
-        // Controleer de status en pas de checkbox aan
-        const status = localStorage.getItem(`address-${index}-status`);
-        if (status === "bezorgd") {
-            document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none"; // Verberg de rij als het al bezorgd is
-        }
     });
 }
 
-// Functie om de bezorgstatus van een adres te wijzigen
-function toggleAddress(index) {
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    const row = document.getElementById(`row-${index}`);
+// Functie voor het weergeven van het contextmenu
+function showContextMenu(event, index) {
+    event.preventDefault();
+    selectedAddressIndex = index;
 
-    if (checkbox.checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-        row.style.display = "none"; // Verberg het adres
-    } else {
-        localStorage.removeItem(`address-${index}-status`);
-        row.style.display = ""; // Laat het adres weer zien
-    }
+    const menu = document.getElementById("context-menu");
+    menu.style.top = `${event.clientY}px`;
+    menu.style.left = `${event.clientX}px`;
+    menu.style.display = 'block';
 }
 
-// Functie om de adressen te tonen in het beheer tabblad
-function renderBeheerList() {
-    const beheerListElement = document.getElementById("beheer-list");
-    beheerListElement.innerHTML = '';
+// Functie om het contextmenu te verbergen
+document.addEventListener("click", () => {
+    document.getElementById("context-menu").style.display = 'none';
+});
 
-    addresses.forEach((address, index) => {
-        const tr = document.createElement("tr");
-        tr.id = `row-beheer-${index}`;
-        tr.innerHTML = `
-            <td>${address.name}</td>
-            <td>${address.address}</td>
-            <td><button onclick="removeAddress(${index})">❌</button></td>
-        `;
-        beheerListElement.appendChild(tr);
-    });
+// Functie om een adres te bewerken
+function editAddress() {
+    const address = addresses[selectedAddressIndex];
+    document.getElementById("new-name").value = address.name;
+    document.getElementById("new-address").value = address.address;
+    removeAddress(selectedAddressIndex); // Verwijder het oude adres
 }
 
-// Functie om een nieuw adres toe te voegen
+// Functie om een adres te verwijderen
+function removeAddress(index) {
+    addresses.splice(index, 1);
+    saveAddresses();
+    renderAddressList(addresses);
+}
+
+// Functie om een adres toe te voegen
 function addAddress() {
     const nameInput = document.getElementById("new-name").value;
     const addressInput = document.getElementById("new-address").value;
@@ -64,7 +59,6 @@ function addAddress() {
         addresses.push({ name: nameInput, address: addressInput });
         saveAddresses();
         renderAddressList(addresses);
-        renderBeheerList();
         document.getElementById("new-name").value = "";
         document.getElementById("new-address").value = "";
     } else {
@@ -72,56 +66,33 @@ function addAddress() {
     }
 }
 
-// Functie om een adres te verwijderen uit de lijst
-function removeAddress(index) {
-    addresses.splice(index, 1);
-    saveAddresses();
-    renderBeheerList();
-    renderAddressList(addresses);
-}
-
-// Functie om de adressen in localStorage op te slaan
+// Functie om adressen op te slaan in localStorage
 function saveAddresses() {
     localStorage.setItem("savedAddresses", JSON.stringify(addresses));
 }
 
-// Functie om de adressen uit localStorage te laden
-function loadAddresses() {
+// Functie om de tabbladen te tonen
+function showTab(tabName) {
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.style.display = 'none';
+    });
+    document.getElementById(tabName).style.display = 'block';
+
+    const tabHeaders = document.querySelectorAll('.tab');
+    tabHeaders.forEach(header => {
+        header.classList.remove('active');
+    });
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// Bij laden van de pagina, adreslijst ophalen en weergeven
+document.addEventListener("DOMContentLoaded", function() {
     const savedAddresses = JSON.parse(localStorage.getItem("savedAddresses"));
     if (savedAddresses) {
-        renderAddressList(savedAddresses);
-        renderBeheerList();
-    } else {
-        const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                renderAddressList(data);
-                renderBeheerList();
-            })
-            .catch(error => {
-                console.error('Er is een fout opgetreden bij het ophalen van de adressen:', error);
-            });
+        addresses = savedAddresses;
+        renderAddressList(addresses);
     }
-}
 
-// Functie om tabbladen te wisselen
-function openTab(evt, tabName) {
-    const tabContents = document.getElementsByClassName("tabcontent");
-    for (let i = 0; i < tabContents.length; i++) {
-        tabContents[i].style.display = "none";
-    }
-    const tabLinks = document.getElementsByClassName("tablink");
-    for (let i = 0; i < tabLinks.length; i++) {
-        tabLinks[i].classList.remove("active");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.classList.add("active");
-}
-
-// Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
-document.addEventListener("DOMContentLoaded", function() {
-    loadAddresses();
-    document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
-    openTab(event, 'bezorglijst'); // Zet de default tab op bezorglijst
+    showTab('bezorglijst'); // Start op het bezorglijst-tabblad
 });
