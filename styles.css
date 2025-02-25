@@ -1,5 +1,6 @@
+/* Algemene stijl */
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7fc;
     margin: 0;
     padding: 0;
@@ -10,17 +11,30 @@ body {
 }
 
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1000px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
     padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
+/* Koptekst */
 h1, h2 {
     text-align: center;
     color: #333;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 28px;
+    color: #4CAF50;
+    margin-bottom: 10px;
 }
 
 /* Tabbladen */
@@ -28,20 +42,23 @@ h1, h2 {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    border-bottom: 2px solid #ccc;
 }
 
-.tab {
-    padding: 15px 20px;
+.tab-header div {
+    padding: 15px;
+    background-color: #f1f1f1;
+    margin: 0 10px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 18px;
+    font-weight: bold;
     color: #555;
+    transition: background-color 0.3s;
 }
 
-.tab.active {
-    border-bottom: 3px solid #4CAF50;
-    font-weight: bold;
-    color: #000;
+.tab-header div.active {
+    background-color: #4CAF50;
+    color: white;
 }
 
 /* Tabelstijl */
@@ -49,42 +66,98 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    overflow-x: auto;
 }
 
 th, td {
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #ddd;
     text-align: left;
-}
-
-th {
-    background-color: #f1f1f1;
-}
-
-/* Contextmenu */
-.context-menu {
-    display: none;
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 10px;
-    z-index: 10;
-}
-
-.context-menu ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.context-menu li {
-    padding: 8px 15px;
-    cursor: pointer;
+    font-size: 16px;
     color: #555;
 }
 
-.context-menu li:hover {
-    background-color: #f2f2f2;
+th {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Knopstijl */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 300px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+/* Invoer Velden */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* Media Query voor mobiele schermen */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px 0;
+    }
+}
+
+/* Verbetering voor grotere schermen */
+@media screen and (min-width: 601px) {
+    .container {
+        width: 85%;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
 }
