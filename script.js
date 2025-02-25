@@ -1,14 +1,14 @@
-let addresses = []; // Maak een globale variabele aan om adressen op te slaan
+let addresses = []; // Globale variabele om adressen op te slaan
 
 // Functie om de lijst van adressen weer te geven
 function renderAddressList(data) {
-    addresses = data; // Sla de adressen op in de globale variabele
+    addresses = data; // Sla adressen op in de globale variabele
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
-    // Loop door de adressen en voeg ze toe aan de tabel
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
+        tr.id = `row-${index}`; // Geef de rij een uniek ID
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
@@ -17,43 +17,46 @@ function renderAddressList(data) {
         addressListElement.appendChild(tr);
 
         // Controleer de status en pas de checkbox aan
-        const checkbox = document.getElementById(`checkbox-${index}`);
         const status = localStorage.getItem(`address-${index}-status`);
-        checkbox.checked = (status === "bezorgd");
+        if (status === "bezorgd") {
+            document.getElementById(`checkbox-${index}`).checked = true;
+            tr.style.display = "none"; // Verberg de rij als deze al bezorgd was
+        }
     });
 }
 
 // Functie om de bezorgstatus van een adres te wijzigen
 function toggleAddress(index) {
     const checkbox = document.getElementById(`checkbox-${index}`);
+    const row = document.getElementById(`row-${index}`);
+
     if (checkbox.checked) {
         localStorage.setItem(`address-${index}-status`, "bezorgd");
+        row.style.display = "none"; // Verberg het adres
     } else {
         localStorage.removeItem(`address-${index}-status`);
+        row.style.display = ""; // Laat het adres weer zien (hoewel dit in de praktijk niet nodig is)
     }
 }
 
+// Functie om alle adressen terug te zetten en weer te tonen
 function resetCheckboxes() {
-    console.log("Resetknop is geklikt!"); // Debugging: controleer of de functie wordt aangeroepen
-    
-    // Zorg ervoor dat addresses gevuld is voordat we het proberen te resetten
-    if (!addresses || addresses.length === 0) {
-        console.error("Adressenlijst is leeg of niet geladen.");
-        return;
-    }
+    console.log("Resetknop is geklikt!");
 
     addresses.forEach((_, index) => {
         const checkbox = document.getElementById(`checkbox-${index}`);
+        const row = document.getElementById(`row-${index}`);
+
         if (checkbox) {
-            checkbox.checked = false;  // Zet de checkbox uit
-            console.log(`Checkbox ${index} uitgeschakeld.`); // Debugging
-        } else {
-            console.warn(`Checkbox ${index} niet gevonden.`); // Debugging
+            checkbox.checked = false; // Zet de checkbox uit
         }
-        localStorage.removeItem(`address-${index}-status`);  // Verwijder de status uit localStorage
+        if (row) {
+            row.style.display = ""; // Laat de rij weer zien
+        }
+        localStorage.removeItem(`address-${index}-status`); // Verwijder de status uit localStorage
     });
 
-    console.log("Alle adressen gereset.");
+    console.log("Alle adressen zijn weer zichtbaar.");
 }
 
 // Functie om het JSON-bestand van GitHub te laden
@@ -72,7 +75,7 @@ function loadAddresses() {
 
 // Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
 document.addEventListener("DOMContentLoaded", function() {
-    loadAddresses();  
+    loadAddresses();
 
     // Reset-knop functionaliteit toevoegen
     document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
