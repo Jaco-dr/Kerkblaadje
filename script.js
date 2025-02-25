@@ -1,98 +1,99 @@
-let addresses = []; // Globale variabele om adressen op te slaan
-let selectedAddressIndex = null; // Houdt het geselecteerde adres bij voor bewerken of verwijderen
+let addresses = []; // Lijst om adressen op te slaan
 
 // Functie om de lijst van adressen weer te geven
 function renderAddressList(data) {
-    addresses = data;
+    addresses = data; // Sla de adressen op in de globale variabele
     const addressListElement = document.getElementById("address-list");
     addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
 
+    // Loop door de adressen en voeg ze toe aan de tabel
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
         tr.id = `row-${index}`;
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
-            <td><input type="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
+            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
         `;
-        tr.addEventListener("contextmenu", (event) => showContextMenu(event, index)); // Rechtsklikken
         addressListElement.appendChild(tr);
+
+        // Controleer de status van het adres in localStorage
+        const status = localStorage.getItem(`address-${index}-status`);
+        if (status === "bezorgd") {
+            document.getElementById(`checkbox-${index}`).checked = true;
+            tr.style.display = "none"; // Verberg het adres als het bezorgd is
+        }
     });
 }
 
-// Functie voor het weergeven van het contextmenu
-function showContextMenu(event, index) {
-    event.preventDefault();
-    selectedAddressIndex = index;
+// Functie om de bezorgstatus van een adres te wijzigen
+function toggleAddress(index) {
+    const checkbox = document.getElementById(`checkbox-${index}`);
+    const row = document.getElementById(`row-${index}`);
 
-    const menu = document.getElementById("context-menu");
-    menu.style.top = `${event.clientY}px`;
-    menu.style.left = `${event.clientX}px`;
-    menu.style.display = 'block';
+    if (checkbox.checked) {
+        localStorage.setItem(`address-${index}-status`, "bezorgd");
+        row.style.display = "none"; // Verberg het adres
+    } else {
+        localStorage.removeItem(`address-${index}-status`);
+        row.style.display = ""; // Laat het adres weer zien
+    }
 }
 
-// Functie om het contextmenu te verbergen
-document.addEventListener("click", () => {
-    document.getElementById("context-menu").style.display = 'none';
-});
+// Functie om de adressen van GitHub op te halen
+function loadAddresses() {
+    const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
 
-// Functie om een adres te bewerken
-function editAddress() {
-    const address = addresses[selectedAddressIndex];
-    document.getElementById("new-name").value = address.name;
-    document.getElementById("new-address").value = address.address;
-    removeAddress(selectedAddressIndex); // Verwijder het oude adres
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            renderAddressList(data); // Render de adressen in de bezorglijst
+        })
+        .catch(error => {
+            console.error('Er is een fout opgetreden bij het ophalen van de adressen:', error);
+        });
 }
 
-// Functie om een adres te verwijderen
-function removeAddress(index) {
-    addresses.splice(index, 1);
-    saveAddresses();
-    renderAddressList(addresses);
-}
-
-// Functie om een adres toe te voegen
+// Functie om nieuwe adressen toe te voegen
 function addAddress() {
     const nameInput = document.getElementById("new-name").value;
     const addressInput = document.getElementById("new-address").value;
+
     if (nameInput && addressInput) {
-        addresses.push({ name: nameInput, address: addressInput });
-        saveAddresses();
-        renderAddressList(addresses);
-        document.getElementById("new-name").value = "";
+        const newAddress = { name: nameInput, address: addressInput };
+        addresses.push(newAddress); // Voeg het nieuwe adres toe aan de lijst
+        renderAddressList(addresses); // Update de lijst met adressen
+        document.getElementById("new-name").value = ""; // Reset het invoerveld
         document.getElementById("new-address").value = "";
     } else {
         alert("Vul een naam en adres in.");
     }
 }
 
-// Functie om adressen op te slaan in localStorage
-function saveAddresses() {
-    localStorage.setItem("savedAddresses", JSON.stringify(addresses));
+// Reset de checkboxen van de bezorglijst
+function resetCheckboxes() {
+    console.log("Resetknop is geklikt!");
+
+    addresses.forEach((_, index) => {
+        const checkbox = document.getElementById(`checkbox-${index}`);
+        const row = document.getElementById(`row-${index}`);
+
+        if (checkbox) {
+            checkbox.checked = false; // Zet de checkbox uit
+        }
+        if (row) {
+            row.style.display = ""; // Laat de rij weer zien
+        }
+        localStorage.removeItem(`address-${index}-status`); // Verwijder de status uit localStorage
+    });
+
+    console.log("Alle adressen zijn weer zichtbaar.");
 }
 
-// Functie om de tabbladen te tonen
-function showTab(tabName) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.style.display = 'none';
-    });
-    document.getElementById(tabName).style.display = 'block';
-
-    const tabHeaders = document.querySelectorAll('.tab');
-    tabHeaders.forEach(header => {
-        header.classList.remove('active');
-    });
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-}
-
-// Bij laden van de pagina, adreslijst ophalen en weergeven
+// Standaard de bezorglijst tab tonen bij laden van de pagina
 document.addEventListener("DOMContentLoaded", function() {
-    const savedAddresses = JSON.parse(localStorage.getItem("savedAddresses"));
-    if (savedAddresses) {
-        addresses = savedAddresses;
-        renderAddressList(addresses);
-    }
+    loadAddresses(); // Laad de adressen van GitHub
 
-    showTab('bezorglijst'); // Start op het bezorglijst-tabblad
+    // Reset-knop functionaliteit toevoegen
+    document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
 });
