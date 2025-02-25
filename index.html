@@ -5,29 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adresbeheer</title>
     <style>
+        /* Algemene bodystijl */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc; /* Lichte achtergrondkleur */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Tabbladen styling */
         .tabs {
             display: flex;
             margin-bottom: 20px;
         }
 
         .tabs button {
-            padding: 10px;
+            padding: 12px 24px;
             cursor: pointer;
             border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s;
+            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor tabbladen */
+            color: #00796b; /* Groene tekstkleur */
+            font-size: 16px;
+            border-radius: 10px;
+            margin-right: 10px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
         }
 
+        /* Hover-effect voor tabbladen */
         .tabs button:hover {
-            background-color: #e0e0e0;
+            background-color: #4caf50; /* Groene achtergrond bij hover */
+            color: white;
+            transform: scale(1.05);
         }
 
+        /* Actieve tabblad styling */
+        .tabs button.active {
+            background-color: #00796b; /* Groene achtergrond voor actieve tab */
+            color: white;
+        }
+
+        /* Tabblad inhoud styling */
         .tab-content {
             display: none;
+            width: 80%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
+        /* Actieve tabblad inhoud zichtbaar maken */
         .tab-content.active {
             display: block;
+        }
+
+        /* Tabelstijl */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa; /* Lichte grijze achtergrond voor cellen */
+        }
+
+        th {
+            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor kopjes */
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Lichtgrijze achtergrond voor even rijen */
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* Subtiele hover-effect op rijen */
+        }
+
+        /* Knopstijl */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Invoer velden styling */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
         }
     </style>
 </head>
@@ -35,12 +133,12 @@
 
     <!-- Tabbladen -->
     <div class="tabs">
-        <button id="tab-addresses">Bezorglijst</button>
+        <button id="tab-addresses" class="active">Bezorglijst</button>
         <button id="tab-beheer">Adres Beheer</button>
     </div>
 
     <!-- Bezorglijst Tabblad -->
-    <div id="addresses-tab" class="tab-content">
+    <div id="addresses-tab" class="tab-content active">
         <h2>Bezorglijst</h2>
         <table border="1">
             <thead>
@@ -75,7 +173,7 @@
         <button onclick="addAddress()">Toevoegen</button>
     </div>
 
-    <script src="script.js"></script> <!-- Zorg dat deze verwijst naar je JavaScript-bestand -->
+    <script src="script.js"></script>
 
 </body>
 </html>
