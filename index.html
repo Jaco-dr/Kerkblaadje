@@ -3,30 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerkblaadjes Bezorgtool</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Adresbeheer</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Kerkblaadjes Bezorgtool</h1>
-        
-        <!-- Tabel voor de bezorging -->
-        <table id="address-table">
-            <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Adres</th>
-                    <th>Bezorgstatus</th>
-                </tr>
-            </thead>
-            <tbody id="address-list">
-                <!-- Adressen worden hier geladen door de JavaScript -->
-            </tbody>
-        </table>
 
-        <!-- Knop om alle vinkjes (checkboxen) te resetten -->
-<button id="reset-delivery-btn" onclick="resetCheckboxes()">Reset Bezorgstatus</button>
+    <!-- Bezorglijst -->
+    <h2>Bezorglijst</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Adres</th>
+                <th>Bezorgd</th>
+            </tr>
+        </thead>
+        <tbody id="address-list"></tbody>
+    </table>
+    <button id="reset-button">Reset Bezorgstatus</button>
 
-    <script src="script.js"></script>
+    <hr>
+
+    <!-- Beheer Tabblad -->
+    <h2>Adres Beheer</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Adres</th>
+                <th>Actie</th>
+            </tr>
+        </thead>
+        <tbody id="beheer-list"></tbody>
+    </table>
+
+    <h3>Nieuw Adres Toevoegen</h3>
+    <input type="text" id="new-name" placeholder="Naam">
+    <input type="text" id="new-address" placeholder="Adres">
+    <button onclick="addAddress()">Toevoegen</button>
+
+    <script src="script.js"></script> <!-- Zorg dat deze verwijst naar je JavaScript-bestand -->
+
 </body>
 </html>
