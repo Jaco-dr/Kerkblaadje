@@ -1,107 +1,109 @@
-let addresses = []; // Globale variabele om adressen op te slaan
+// Variabele voor het opslaan van adressen
+let addresses = [];
 
-// Functie om de lijst van adressen weer te geven
-function renderAddressList(data) {
-    addresses = data; // Sla adressen op in de globale variabele
-    const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = ''; // Maak de lijst leeg voordat we deze vullen
-
-    addresses.forEach((address, index) => {
-        const tr = document.createElement("tr");
-        tr.id = `row-${index}`; // Geef de rij een uniek ID
-        tr.innerHTML = `
-            <td>${address.name}</td>
-            <td>${address.address}</td>
-            <td><input type="checkbox" class="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
-        `;
-        addressListElement.appendChild(tr);
-
-        // Controleer de status en pas de checkbox aan
-        const status = localStorage.getItem(`address-${index}-status`);
-        if (status === "bezorgd") {
-            document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none"; // Verberg de rij als deze al bezorgd was
-        }
-    });
-}
-
-// Functie om de bezorgstatus van een adres te wijzigen
-function toggleAddress(index) {
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    const row = document.getElementById(`row-${index}`);
-
-    if (checkbox.checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-        row.style.display = "none"; // Verberg het adres
-    } else {
-        localStorage.removeItem(`address-${index}-status`);
-        row.style.display = ""; // Laat het adres weer zien
-    }
-}
-
-// Functie om alle adressen terug te zetten en weer te tonen
-function resetCheckboxes() {
-    console.log("Resetknop is geklikt!");
-
-    addresses.forEach((_, index) => {
-        const checkbox = document.getElementById(`checkbox-${index}`);
-        const row = document.getElementById(`row-${index}`);
-
-        if (checkbox) {
-            checkbox.checked = false; // Zet de checkbox uit
-        }
-        if (row) {
-            row.style.display = ""; // Laat de rij weer zien
-        }
-        localStorage.removeItem(`address-${index}-status`); // Verwijder de status uit localStorage
-    });
-
-    console.log("Alle adressen zijn weer zichtbaar.");
-}
-
-// Functie om het JSON-bestand van GitHub te laden
+// Functie om de adressen van het JSON-bestand in te laden
 function loadAddresses() {
-    const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
-
-    fetch(url)
-        .then(response => response.json())
+    fetch('adressen.json') // Dit is het bestand waar de adressen vandaan komen
+        .then(response => response.json()) // Zet de response om naar JSON
         .then(data => {
-            renderAddressList(data);
+            addresses = data; // Zet de geladen data in de 'addresses' array
+            displayAddresses(); // Toon de adressen in de Bezorglijst
+            displayBeheer(); // Toon de adressen in het Beheer tabblad
         })
         .catch(error => {
-            console.error('Er is een fout opgetreden bij het ophalen van de adressen:', error);
+            console.error('Er is een fout opgetreden bij het laden van de adressen:', error);
         });
 }
 
-// Zorg ervoor dat de lijst van adressen geladen wordt zodra de pagina klaar is
-document.addEventListener("DOMContentLoaded", function() {
-    loadAddresses();
+// Functie om adressen in de Bezorglijst weer te geven
+function displayAddresses() {
+    const addressList = document.getElementById('address-list');
+    addressList.innerHTML = ''; // Maak de lijst leeg voordat je nieuwe items toevoegt
 
-    // Reset-knop functionaliteit toevoegen
-    document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
+    addresses.forEach((address, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${address.name}</td>
+            <td>${address.address}</td>
+            <td>${address.delivered ? 'Ja' : 'Nee'}</td>
+        `;
+        addressList.appendChild(row);
+    });
+}
+
+// Functie om adressen in het Beheer-gedeelte weer te geven
+function displayBeheer() {
+    const beheerList = document.getElementById('beheer-list');
+    beheerList.innerHTML = '';
+
+    addresses.forEach((address, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${address.name}</td>
+            <td>${address.address}</td>
+            <td><button onclick="removeAddress(${index})">Verwijderen</button></td>
+        `;
+        beheerList.appendChild(row);
+    });
+}
+
+// Functie om een nieuw adres toe te voegen
+function addAddress() {
+    const nameInput = document.getElementById('new-name');
+    const addressInput = document.getElementById('new-address');
     
-    // Tabbladen logica toevoegen
-    const tabAddresses = document.getElementById("tab-addresses");
-    const tabBeheer = document.getElementById("tab-beheer");
-    const addressesTab = document.getElementById("addresses-tab");
-    const beheerTab = document.getElementById("beheer-tab");
+    // Maak het nieuwe adres object
+    const newAddress = {
+        name: nameInput.value,
+        address: addressInput.value,
+        delivered: false
+    };
 
-    // Functie om tabbladen weer te geven
-    function showTab(tab) {
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(t => t.classList.remove('active')); // Verberg alle tabbladen
-        tab.classList.add('active'); // Toon het geselecteerde tabblad
-    }
+    // Voeg het nieuwe adres toe aan de adressenlijst
+    addresses.push(newAddress);
 
-    // Initieer de weergave van het eerste tabblad (Bezorglijst)
-    showTab(addressesTab);
+    // Leeg de invoervelden
+    nameInput.value = '';
+    addressInput.value = '';
 
-    // Voeg klik-event listeners toe om tussen tabbladen te schakelen
-    tabAddresses.addEventListener("click", function() {
-        showTab(addressesTab);
+    // Werk de tabbladen bij
+    displayAddresses();
+    displayBeheer();
+}
+
+// Functie om een adres te verwijderen
+function removeAddress(index) {
+    addresses.splice(index, 1); // Verwijder het adres uit de array
+
+    // Werk de tabbladen bij
+    displayAddresses();
+    displayBeheer();
+}
+
+// Functie om de bezorgstatus te resetten
+document.getElementById('reset-button').addEventListener('click', () => {
+    addresses.forEach(address => {
+        address.delivered = false; // Zet alle bezorgstatussen op 'false'
     });
 
-    tabBeheer.addEventListener("click", function() {
-        showTab(beheerTab);
-    });
+    // Werk de Bezorglijst bij
+    displayAddresses();
 });
+
+// Event listeners voor tabbladen
+document.getElementById('tab-addresses').addEventListener('click', () => {
+    document.getElementById('addresses-tab').classList.add('active');
+    document.getElementById('beheer-tab').classList.remove('active');
+    document.getElementById('tab-addresses').classList.add('active');
+    document.getElementById('tab-beheer').classList.remove('active');
+});
+
+document.getElementById('tab-beheer').addEventListener('click', () => {
+    document.getElementById('beheer-tab').classList.add('active');
+    document.getElementById('addresses-tab').classList.remove('active');
+    document.getElementById('tab-beheer').classList.add('active');
+    document.getElementById('tab-addresses').classList.remove('active');
+});
+
+// Laad de adressen bij het openen van de pagina
+window.onload = loadAddresses;
