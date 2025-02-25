@@ -20,6 +20,7 @@ body {
     border-radius: 20px; /* Zeer ronde hoeken */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     border: 1px solid #e0e0e0; /* Subtiele rand voor meer definitie */
+    overflow: hidden;
 }
 
 /* Koptekst */
@@ -31,12 +32,14 @@ h1, h2 {
 h1 {
     font-size: 36px;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 h2 {
     font-size: 28px;
     color: #4CAF50; /* Groen accent voor de Bezorglijst */
     margin-bottom: 10px;
+    font-weight: 500;
 }
 
 /* Tabbladen met kleuren en zachtere randen */
@@ -46,6 +49,7 @@ h2 {
     margin-bottom: 20px;
     border-radius: 15px;
     background-color: #f9f9f9; /* Lichte achtergrondkleur */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tab-header div {
@@ -57,13 +61,18 @@ h2 {
     font-size: 18px;
     font-weight: bold;
     color: #555;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tab-header div.active {
     background-color: #4CAF50;
     color: white;
     transform: scale(1.05); /* Subtiele vergroting voor de actieve tab */
+    box-shadow: 0px 4px 12px rgba(76, 175, 80, 0.5); /* Schaduw voor actieve tab */
+}
+
+.tab-header div:hover {
+    background-color: #388e3c; /* Donkergroene hover kleur */
 }
 
 /* Tabelstijl */
@@ -72,6 +81,7 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
     overflow-x: auto;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); /* Schaduw voor tabel */
 }
 
 th, td {
@@ -81,6 +91,7 @@ th, td {
     font-size: 16px;
     color: #555;
     background-color: #fafafa; /* Lichtgrijze achtergrond voor cellen */
+    transition: background-color 0.3s;
 }
 
 th {
@@ -109,12 +120,13 @@ button {
     margin: 20px auto;
     width: 100%;
     max-width: 300px;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 button:hover {
     background-color: #45a049;
     transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(72, 172, 68, 0.5); /* Schaduw op hover */
 }
 
 /* Invoer Velden met ronde hoeken en focus effect */
@@ -126,12 +138,13 @@ input[type="text"] {
     border-radius: 15px; /* Ronde hoeken voor invoervelden */
     margin-bottom: 20px;
     box-sizing: border-box;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input[type="text"]:focus {
     outline: none;
     border-color: #4CAF50;
+    box-shadow: 0px 0px 8px rgba(76, 175, 80, 0.5);
 }
 
 /* Media Query voor mobiele schermen */
