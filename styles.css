@@ -45,6 +45,11 @@ h1 {
     display: none;
 }
 
+/* Actief tabblad styling */
+.tab.active {
+    background-color: #ddd;
+}
+
 /* Tabelstijl */
 table {
     width: 100%;
