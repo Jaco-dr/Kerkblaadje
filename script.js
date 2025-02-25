@@ -23,7 +23,7 @@ function displayAddresses() {
 // Functie om adressen in het Beheer-gedeelte weer te geven
 function displayBeheer() {
     const beheerList = document.getElementById('beheer-list');
-    beheerList.innerHTML = '';
+    beheerList.innerHTML = ''; // Maak de beheer lijst leeg voordat je nieuwe items toevoegt
 
     addresses.forEach((address, index) => {
         const row = document.createElement('tr');
@@ -57,7 +57,7 @@ function addAddress() {
 
     // Werk de tabbladen bij
     displayAddresses();
-    displayBeheer();
+    displayBeheer(); // Dit zorgt ervoor dat het beheergedeelte wordt bijgewerkt!
 }
 
 // Functie om een adres te verwijderen
@@ -66,7 +66,37 @@ function removeAddress(index) {
 
     // Werk de tabbladen bij
     displayAddresses();
-    displayBeheer();
+    displayBeheer(); // Dit zorgt ervoor dat het beheergedeelte wordt bijgewerkt!
+}
+
+// Functie om de bezorgstatus te resetten
+document.getElementById('reset-button').addEventListener('click', () => {
+    addresses.forEach(address => {
+        address.delivered = false; // Zet alle bezorgstatussen op 'false'
+    });
+
+    // Werk de Bezorglijst bij
+    displayAddresses();
+});
+
+// Event listeners voor tabbladen
+document.getElementById('tab-addresses').addEventListener('click', () => {
+    document.getElementById('addresses-tab').classList.add('active');
+    document.getElementById('beheer-tab').classList.remove('active');
+    document.getElementById('tab-addresses').classList.add('active');
+    document.getElementById('tab-beheer').classList.remove('active');
+});
+
+document.getElementById('tab-beheer').addEventListener('click', () => {
+    document.getElementById('beheer-tab').classList.add('active');
+    document.getElementById('addresses-tab').classList.remove('active');
+    document.getElementById('tab-beheer').classList.add('active');
+    document.getElementById('tab-addresses').classList.remove('active');
+});
+
+// Initieel de adressen weergeven
+displayAddresses();
+displayBeheer();
 }
 
 // Functie om de bezorgstatus te resetten
