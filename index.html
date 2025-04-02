@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="nl">
+<!DOCTYPE html>
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,6 +89,29 @@
             background-color: #45a049;
             transform: scale(1.05);
         }
+
+        /* Responsieve weergave */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tabs button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .tab-content {
+                width: 100%;
+                padding: 10px;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -95,6 +119,7 @@
         <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
         <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
     </div>
+
     <div id="wijk1-tab" class="tab-content active">
         <h2>Bezorglijst wijk 1 (Jeroen & Elize)</h2>
         <table>
@@ -111,6 +136,7 @@
         </table>
         <button id="reset-button-wijk1">Reset Bezorgstatus</button>
     </div>
+
     <div id="wijk2-tab" class="tab-content">
         <h2>Bezorglijst wijk 2 (Jaco & Jo-Anneke)</h2>
         <table>
@@ -127,8 +153,27 @@
         </table>
         <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
-    <script src="adressen.js"></script>
+
+    <div id="insertForm" style="display: none;">
+        <input type="hidden" id="insertTarget">
+        Naam: <input type="text" id="newName"><br>
+        Adres: <input type="text" id="newAddress"><br>
+        Opmerking: <input type="text" id="newComment"><br>
+        <button onclick="handleInsert()">✔️</button>
+    </div>
+
     <script>
+        // Data arrays for wijk1 and wijk2
+        const wijk1Data = [
+            { name: "Jan Jansen", address: "Hoofdstraat 1", comment: "Geen opmerkingen", delivered: false },
+            { name: "Piet de Vries", address: "Kerkweg 2", comment: "Bezorgd vorige week", delivered: true }
+        ];
+
+        const wijk2Data = [
+            { name: "Klaas van Dijk", address: "Schoolstraat 3", comment: "", delivered: false },
+            { name: "Marie van der Meer", address: "Zijdeweg 4", comment: "Bezorgd gisteren", delivered: true }
+        ];
+
         function displayAddresses(wijk) {
             const wijkList = document.getElementById(`address-list-${wijk}`);
             wijkList.innerHTML = "";
@@ -148,28 +193,63 @@
                 `;
             });
         }
+
+        function handleCheckboxChange(event, wijk, index) {
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data[index].delivered = event.target.checked;
+            displayAddresses(wijk);
+        }
+
+        function openTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tabs button');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
         function showInsertForm(targetAddress) {
             document.getElementById("insertTarget").value = targetAddress;
             document.getElementById("insertForm").style.display = "block";
         }
+
         function handleInsert() {
             const targetAddress = document.getElementById("insertTarget").value;
             const name = document.getElementById("newName").value;
             const address = document.getElementById("newAddress").value;
             const comment = document.getElementById("newComment").value;
-            insertAddress(wijk1Data, targetAddress, name, address, comment, true);
+
+            const targetData = wijk1Data.find(item => item.address === targetAddress) ? wijk1Data : wijk2Data;
+            insertAddress(targetData, targetAddress, name, address, comment, true);
+
             document.getElementById("insertForm").style.display = "none";
         }
+
+        function insertAddress(wijkData, targetAddress, name, address, comment, delivered) {
+            const targetIndex = wijkData.findIndex(item => item.address === targetAddress);
+            if (targetIndex > -1) {
+                wijkData.splice(targetIndex + 1, 0, { name, address, comment, delivered });
+                displayAddresses(wijkData === wijk1Data ? 'wijk1' : 'wijk2');
+            }
+        }
+
+        function removeAddress(wijkData, address) {
+            const index = wijkData.findIndex(item => item.address === address);
+            if (index > -1) {
+                wijkData.splice(index, 1);
+                displayAddresses(wijkData === wijk1Data ? 'wijk1' : 'wijk2');
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
-            document.body.insertAdjacentHTML("beforeend", `
-                <div id="insertForm" style="display: none;">
-                    <input type="hidden" id="insertTarget">
-                    Naam: <input type="text" id="newName"><br>
-                    Adres: <input type="text" id="newAddress"><br>
-                    Opmerking: <input type="text" id="newComment"><br>
-                    <button onclick="handleInsert()">✔️</button>
-                </div>
-            `);
             displayAddresses('wijk1');
             displayAddresses('wijk2');
         });
