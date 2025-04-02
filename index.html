@@ -145,6 +145,9 @@
     </div>
 
     <script>
+        let wijk1Data = [];
+        let wijk2Data = [];
+
         function openTab(tabName) {
             // Alle tabbladen verbergen
             document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
@@ -160,32 +163,56 @@
             fetch('adressen.json') // URL naar je JSON-bestand
                 .then(response => response.json())
                 .then(data => {
-                    const wijk1List = document.getElementById("address-list-wijk1");
-                    const wijk2List = document.getElementById("address-list-wijk2");
-
-                    // Leegmaken van de tabbladen
-                    wijk1List.innerHTML = "";
-                    wijk2List.innerHTML = "";
-
-                    // Wijk 1 Adressen toevoegen
-                    data.wijk1.forEach(item => {
-                        wijk1List.innerHTML += `<tr><td>${item.name}</td><td>${item.address}</td><td><input type="checkbox"></td></tr>`;
-                    });
-
-                    // Wijk 2 Adressen toevoegen
-                    data.wijk2.forEach(item => {
-                        wijk2List.innerHTML += `<tr><td>${item.name}</td><td>${item.address}</td><td><input type="checkbox"></td></tr>`;
-                    });
+                    wijk1Data = data.wijk1;
+                    wijk2Data = data.wijk2;
+                    
+                    displayAddresses('wijk1');
+                    displayAddresses('wijk2');
                 })
                 .catch(error => {
                     console.error('Error loading the JSON file:', error);
                 });
         }
 
+        // Adressen weergeven in de tab
+        function displayAddresses(wijk) {
+            const wijkList = document.getElementById(`address-list-${wijk}`);
+            wijkList.innerHTML = "";
+
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+
+            data.forEach((item, index) => {
+                wijkList.innerHTML += `
+                    <tr data-index="${index}">
+                        <td>${item.name}</td>
+                        <td>${item.address}</td>
+                        <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})"></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Functie die wordt aangeroepen wanneer een checkbox wordt aangevinkt
+        function handleCheckboxChange(event, wijk, index) {
+            const tableRow = event.target.closest('tr');
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+
+            if (event.target.checked) {
+                // Verwijder het adres uit de lijst
+                tableRow.style.display = 'none';
+            } else {
+                // Zet het adres terug in de lijst
+                tableRow.style.display = '';
+            }
+        }
+
         // Reset Bezorgstatus functie
         function resetBezorgstatus(wijk) {
-            const checkboxes = document.querySelectorAll(`#address-list-${wijk} input[type="checkbox"]`);
-            checkboxes.forEach(checkbox => checkbox.checked = false);
+            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
+            tableRows.forEach(row => {
+                row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
+                row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
+            });
         }
 
         document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
