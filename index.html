@@ -112,20 +112,8 @@
         }
 
         /* Invoer velden styling */
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #4CAF50;
+        input[type="checkbox"] {
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -139,7 +127,7 @@
 
     <!-- Bezorglijst Wijk 1 -->
     <div id="wijk1-tab" class="tab-content active">
-        <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
+        <h2>Bezorglijst Wijk 1</h2>
         <table border="1">
             <thead>
                 <tr>
@@ -156,7 +144,7 @@
 
     <!-- Bezorglijst Wijk 2 -->
     <div id="wijk2-tab" class="tab-content">
-        <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
+        <h2>Bezorglijst Wijk 2</h2>
         <table border="1">
             <thead>
                 <tr>
@@ -190,20 +178,20 @@
 
         // Adressen weergeven in de tab
         function displayAddresses(wijk) {
-            const wijkList = document.getElementById(address-list-${wijk});
-            wijkList.innerHTML = "";
+            const wijkList = document.getElementById(`address-list-${wijk}`);
+            wijkList.innerHTML = ""; // Maak de lijst eerst leeg
 
             const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
 
             data.forEach((item, index) => {
-                wijkList.innerHTML += 
+                wijkList.innerHTML += `
                     <tr data-index="${index}">
                         <td>${item.name}</td>
                         <td>${item.address}</td>
                         <td>${item.comment || ''}</td> <!-- Alleen de opmerking weergeven (geen invoerveld) -->
                         <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
                     </tr>
-                ;
+                `;
             });
         }
 
@@ -218,15 +206,9 @@
             }
         }
 
-        // Functie om de opmerking bij te werken
-        function handleCommentChange(event, wijk, index) {
-            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-            data[index].comment = event.target.value;
-        }
-
         // Reset Bezorgstatus functie
         function resetBezorgstatus(wijk) {
-            const tableRows = document.querySelectorAll(#address-list-${wijk} tr);
+            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
             tableRows.forEach(row => {
                 row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
                 row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
