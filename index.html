@@ -200,7 +200,7 @@
                     <tr data-index="${index}">
                         <td>${item.name}</td>
                         <td>${item.address}</td>
-                        <td><input type="text" value="${item.comment || ''}" onchange="handleCommentChange(event, '${wijk}', ${index})"></td> <!-- Opmerkingen veld -->
+                        <td>${item.comment || ''}</td> <!-- Alleen de opmerking weergeven (geen invoerveld) -->
                         <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
                     </tr>
                 `;
