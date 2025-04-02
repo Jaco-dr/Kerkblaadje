@@ -102,22 +102,6 @@
             background-color: #45a049;
             transform: scale(1.05);
         }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
     </style>
 </head>
 <body>
@@ -125,11 +109,11 @@
     <!-- Tabs -->
     <div class="tabs">
         <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst wijk 1</button>
-        <button id="tab-wijk1" onclick="openTab('wijk1')">Bezorglijst wijk 2</button>
+        <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst wijk 2</button>
     </div>
 
-    <!-- Bezorglijst Wijk 1 (Jeroen & Elize)-->
-    <div id="wijk2-tab" class="tab-content active">
+    <!-- Bezorglijst Wijk 1 -->
+    <div id="wijk1-tab" class="tab-content active">
         <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
         <table>
             <thead>
@@ -144,8 +128,8 @@
         <button id="reset-button-wijk1">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Bezorglijst Wijk 2 (Jaco & Jo-Anneke) -->
-    <div id="wijk3-tab" class="tab-content">
+    <!-- Bezorglijst Wijk 2 -->
+    <div id="wijk2-tab" class="tab-content">
         <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
         <table>
             <thead>
@@ -160,32 +144,6 @@
         <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Adres Beheer -->
-    <div id="beheer-tab" class="tab-content">
-        <h2>Adres Beheer</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Adres</th>
-                    <th>Wijk</th>
-                    <th>Actie</th>
-                </tr>
-            </thead>
-            <tbody id="beheer-list"></tbody>
-        </table>
-
-        <h3>Nieuw Adres Toevoegen</h3>
-        <input type="text" id="new-name" placeholder="Naam">
-        <input type="text" id="new-address" placeholder="Adres">
-        <select id="new-wijk">
-            <option value="wijk2">Wijk 2</option>
-            <option value="wijk3">Wijk 3</option>
-        </select>
-        <button onclick="addAddress()">Toevoegen</button>
-    </div>
-
-    <script src="script.js"></script>
     <script>
         function openTab(tabName) {
             // Alle tabbladen verbergen
@@ -196,6 +154,45 @@
             document.getElementById(tabName + "-tab").classList.add("active");
             document.getElementById("tab-" + tabName).classList.add("active");
         }
+
+        // Laden van JSON-data (simulatie)
+        const addresses = {
+            "wijk1": [
+                { naam: "Jan Jansen", adres: "Dorpsstraat 1" },
+                { naam: "Piet Pietersen", adres: "Kerklaan 12" }
+            ],
+            "wijk2": [
+                { naam: "Lisa de Vries", adres: "Hoofdweg 34" },
+                { naam: "Bram de Boer", adres: "Molenweg 5" }
+            ]
+        };
+
+        function loadAddresses() {
+            const wijk1List = document.getElementById("address-list-wijk1");
+            const wijk2List = document.getElementById("address-list-wijk2");
+
+            wijk1List.innerHTML = "";
+            wijk2List.innerHTML = "";
+
+            addresses.wijk1.forEach(item => {
+                wijk1List.innerHTML += `<tr><td>${item.naam}</td><td>${item.adres}</td><td><input type="checkbox"></td></tr>`;
+            });
+
+            addresses.wijk2.forEach(item => {
+                wijk2List.innerHTML += `<tr><td>${item.naam}</td><td>${item.adres}</td><td><input type="checkbox"></td></tr>`;
+            });
+        }
+
+        function resetBezorgstatus(wijk) {
+            const checkboxes = document.querySelectorAll(`#address-list-${wijk} input[type="checkbox"]`);
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+        }
+
+        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
+        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
+
+        // Laden van adressen bij start
+        document.addEventListener("DOMContentLoaded", loadAddresses);
     </script>
 </body>
 </html>
