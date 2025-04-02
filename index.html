@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerkblad HHK Scherpenzeel- Renswoude</title>
+    <title>Kerkblad HHK Scherpenzeel - Renswoude</title>
     <style>
-        /* Algemene bodystijl */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7fc; /* Lichte achtergrondkleur */
+            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,7 +16,6 @@
             height: 100vh;
         }
 
-        /* Tabbladen styling */
         .tabs {
             display: flex;
             margin-bottom: 20px;
@@ -27,28 +25,25 @@
             padding: 12px 24px;
             cursor: pointer;
             border: 1px solid #ccc;
-            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor tabbladen */
-            color: #00796b; /* Groene tekstkleur */
+            background-color: #e0f7fa;
+            color: #00796b;
             font-size: 16px;
             border-radius: 10px;
             margin-right: 10px;
             transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
         }
 
-        /* Hover-effect voor tabbladen */
         .tabs button:hover {
-            background-color: #4caf50; /* Groene achtergrond bij hover */
+            background-color: #4caf50;
             color: white;
             transform: scale(1.05);
         }
 
-        /* Actieve tabblad styling */
         .tabs button.active {
-            background-color: #00796b; /* Groene achtergrond voor actieve tab */
+            background-color: #00796b;
             color: white;
         }
 
-        /* Tabblad inhoud styling */
         .tab-content {
             display: none;
             width: 80%;
@@ -59,12 +54,10 @@
             margin-top: 20px;
         }
 
-        /* Actieve tabblad inhoud zichtbaar maken */
         .tab-content.active {
             display: block;
         }
 
-        /* Tabelstijl */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -77,23 +70,22 @@
             text-align: left;
             font-size: 16px;
             color: #333;
-            background-color: #fafafa; /* Lichte grijze achtergrond voor cellen */
+            background-color: #fafafa;
         }
 
         th {
-            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor kopjes */
+            background-color: #e0f7fa;
             font-weight: bold;
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9; /* Lichtgrijze achtergrond voor even rijen */
+            background-color: #f9f9f9;
         }
 
         tr:hover {
-            background-color: #f1f1f1; /* Subtiele hover-effect op rijen */
+            background-color: #f1f1f1;
         }
 
-        /* Knopstijl */
         button {
             background-color: #4CAF50;
             color: white;
@@ -111,8 +103,7 @@
             transform: scale(1.05);
         }
 
-        /* Invoer velden styling */
-        input[type="text"] {
+        input[type="text"], select {
             width: 100%;
             padding: 12px;
             font-size: 16px;
@@ -123,7 +114,7 @@
             transition: border-color 0.3s;
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus, select:focus {
             outline: none;
             border-color: #4CAF50;
         }
@@ -131,16 +122,17 @@
 </head>
 <body>
 
-    <!-- Tabbladen -->
-    <!--div class="tabs">
-        <button id="tab-addresses" class="active">Bezorglijst</button>
-        <button id="tab-beheer">Adres Beheer</button>
-</div--!>
+    <!-- Tabs -->
+    <div class="tabs">
+        <button id="tab-wijk2" class="active" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
+        <button id="tab-wijk3" onclick="openTab('wijk3')">Bezorglijst Wijk 3</button>
+        <button id="tab-beheer" onclick="openTab('beheer')">Adres Beheer</button>
+    </div>
 
-    <!-- Bezorglijst Tabblad -->
-    <div id="addresses-tab" class="tab-content active">
-        <h2>Bezorglijst</h2>
-        <table border="1">
+    <!-- Bezorglijst Wijk 2 -->
+    <div id="wijk2-tab" class="tab-content active">
+        <h2>Bezorglijst Wijk 2</h2>
+        <table>
             <thead>
                 <tr>
                     <th>Naam</th>
@@ -148,19 +140,36 @@
                     <th>Bezorgd</th>
                 </tr>
             </thead>
-            <tbody id="address-list"></tbody>
+            <tbody id="address-list-wijk2"></tbody>
         </table>
-        <button id="reset-button">Reset Bezorgstatus</button>
+        <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Adres Beheer Tabblad -->
-    <div id="beheer-tab" class="tab-content">
-        <h2>Adres Beheer</h2>
-        <table border="1">
+    <!-- Bezorglijst Wijk 3 -->
+    <div id="wijk3-tab" class="tab-content">
+        <h2>Bezorglijst Wijk 3</h2>
+        <table>
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
+                    <th>Bezorgd</th>
+                </tr>
+            </thead>
+            <tbody id="address-list-wijk3"></tbody>
+        </table>
+        <button id="reset-button-wijk3">Reset Bezorgstatus</button>
+    </div>
+
+    <!-- Adres Beheer -->
+    <div id="beheer-tab" class="tab-content">
+        <h2>Adres Beheer</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Wijk</th>
                     <th>Actie</th>
                 </tr>
             </thead>
@@ -170,7 +179,24 @@
         <h3>Nieuw Adres Toevoegen</h3>
         <input type="text" id="new-name" placeholder="Naam">
         <input type="text" id="new-address" placeholder="Adres">
+        <select id="new-wijk">
+            <option value="wijk2">Wijk 2</option>
+            <option value="wijk3">Wijk 3</option>
+        </select>
         <button onclick="addAddress()">Toevoegen</button>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function openTab(tabName) {
+            // Alle tabbladen verbergen
+            document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+            document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
+
+            // Actieve tab tonen
+            document.getElementById(tabName + "-tab").classList.add("active");
+            document.getElementById("tab-" + tabName).classList.add("active");
+        }
+    </script>
+</body>
+</html>
