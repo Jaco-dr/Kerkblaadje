@@ -129,9 +129,25 @@
         <button id="tab-beheer" onclick="openTab('beheer')">Adres Beheer</button>
     </div>
 
-    <!-- Bezorglijst Wijk 2 -->
+    <!-- Bezorglijst Wijk 1 (Jeroen & Elize)-->
     <div id="wijk2-tab" class="tab-content active">
-        <h2>Bezorglijst Wijk 2</h2>
+        <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Adres</th>
+                    <th>Bezorgd</th>
+                </tr>
+            </thead>
+            <tbody id="address-list-wijk1"></tbody>
+        </table>
+        <button id="reset-button-wijk1">Reset Bezorgstatus</button>
+    </div>
+
+    <!-- Bezorglijst Wijk 2 (Jaco & Jo-Anneke) -->
+    <div id="wijk3-tab" class="tab-content">
+        <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
         <table>
             <thead>
                 <tr>
@@ -143,22 +159,6 @@
             <tbody id="address-list-wijk2"></tbody>
         </table>
         <button id="reset-button-wijk2">Reset Bezorgstatus</button>
-    </div>
-
-    <!-- Bezorglijst Wijk 3 -->
-    <div id="wijk3-tab" class="tab-content">
-        <h2>Bezorglijst Wijk 3</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Adres</th>
-                    <th>Bezorgd</th>
-                </tr>
-            </thead>
-            <tbody id="address-list-wijk3"></tbody>
-        </table>
-        <button id="reset-button-wijk3">Reset Bezorgstatus</button>
     </div>
 
     <!-- Adres Beheer -->
