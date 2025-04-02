@@ -1,3 +1,8 @@
+let addresses = {
+    wijk1: [],
+    wijk2: []
+};
+
 function loadAddresses() {
     const url = 'https://raw.githubusercontent.com/Jaco-dr/Kerkblaadje/main/adressen.json';
 
@@ -6,7 +11,7 @@ function loadAddresses() {
         .then(data => {
             addresses = data;
             saveAddresses(); // Opslaan in localStorage voor caching
-            renderAddressList();
+            renderAddressList('wijk1'); // Standaard wijk1 weergeven
             renderBeheerList();
         })
         .catch(error => {
@@ -15,59 +20,59 @@ function loadAddresses() {
 }
 
 // Haal adressen op uit localStorage, anders laad ze van GitHub
-let addresses = JSON.parse(localStorage.getItem("savedAddresses"));
-
-if (!addresses) {
+if (!localStorage.getItem("savedAddresses")) {
     loadAddresses(); // Eerste keer ophalen van JSON als er niks in localStorage staat
 } else {
-    renderAddressList();
-    renderBeheerList();
+    addresses = JSON.parse(localStorage.getItem("savedAddresses"));
 }
 
-function renderAddressList() {
+function renderAddressList(wijk) {
     const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = ''; // Leeg de lijst voordat we nieuwe data toevoegen
+    addressListElement.innerHTML = '';
 
-    addresses.forEach((address, index) => {
+    const wijkAddresses = addresses[wijk];
+
+    wijkAddresses.forEach((address, index) => {
         const tr = document.createElement("tr");
-        tr.id = `row-${index}`;
+        tr.id = `row-${wijk}-${index}`;
         tr.innerHTML = `
             <td>${address.name}</td>
             <td>${address.address}</td>
-            <td><input type="checkbox" id="checkbox-${index}" onclick="toggleAddress(${index})"></td>
+            <td><input type="checkbox" id="checkbox-${wijk}-${index}" onclick="toggleAddress('${wijk}', ${index})"></td>
         `;
         addressListElement.appendChild(tr);
 
-        // Check of het adres al is gemarkeerd als 'bezorgd'
-        if (localStorage.getItem(`address-${index}-status`) === "bezorgd") {
-            document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none"; // Verberg het adres
+        if (localStorage.getItem(`address-${wijk}-${index}-status`) === "bezorgd") {
+            document.getElementById(`checkbox-${wijk}-${index}`).checked = true;
+            tr.style.display = "none";
         }
     });
 }
 
 function renderBeheerList() {
     const beheerListElement = document.getElementById("beheer-list");
-    beheerListElement.innerHTML = ''; // Leeg de beheer lijst
+    beheerListElement.innerHTML = '';
 
-    addresses.forEach((address, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${address.name}</td>
-            <td>${address.address}</td>
-            <td><button onclick="removeAddress(${index})">❌</button></td>
-        `;
-        beheerListElement.appendChild(tr);
+    Object.keys(addresses).forEach(wijk => {
+        addresses[wijk].forEach((address, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${address.name}</td>
+                <td>${address.address}</td>
+                <td><button onclick="removeAddress('${wijk}', ${index})">❌</button></td>
+            `;
+            beheerListElement.appendChild(tr);
+        });
     });
 }
 
-function addAddress() {
+function addAddress(wijk) {
     const nameInput = document.getElementById("new-name").value;
     const addressInput = document.getElementById("new-address").value;
     if (nameInput && addressInput) {
-        addresses.push({ name: nameInput, address: addressInput });
+        addresses[wijk].push({ name: nameInput, address: addressInput });
         saveAddresses();
-        renderAddressList();
+        renderAddressList(wijk);
         renderBeheerList();
         document.getElementById("new-name").value = "";
         document.getElementById("new-address").value = "";
@@ -76,53 +81,54 @@ function addAddress() {
     }
 }
 
-function removeAddress(index) {
-    addresses.splice(index, 1);
+function removeAddress(wijk, index) {
+    addresses[wijk].splice(index, 1);
     saveAddresses();
-    renderAddressList();
+    renderAddressList(wijk);
     renderBeheerList();
 }
 
-function toggleAddress(index) {
-    const row = document.getElementById(`row-${index}`);
-    if (document.getElementById(`checkbox-${index}`).checked) {
-        localStorage.setItem(`address-${index}-status`, "bezorgd");
-        row.style.display = "none"; // Verberg het adres na 'bezorgd' markering
+function toggleAddress(wijk, index) {
+    const row = document.getElementById(`row-${wijk}-${index}`);
+    if (document.getElementById(`checkbox-${wijk}-${index}`).checked) {
+        localStorage.setItem(`address-${wijk}-${index}-status`, "bezorgd");
+        row.style.display = "none";
     } else {
-        localStorage.removeItem(`address-${index}-status`);
-        row.style.display = ""; // Maak het adres weer zichtbaar als de checkbox niet is aangevinkt
+        localStorage.removeItem(`address-${wijk}-${index}-status`);
+        row.style.display = "";
     }
 }
 
 function resetCheckboxes() {
-    addresses.forEach((_, index) => {
-        // Verwijder de status van alle adressen in localStorage
-        localStorage.removeItem(`address-${index}-status`);
-        const row = document.getElementById(`row-${index}`);
-        const checkbox = document.getElementById(`checkbox-${index}`);
-        
-        if (row) {
-            row.style.display = ""; // Zet de zichtbaarheid van de rij terug naar normaal
-            checkbox.checked = false; // Zet de checkbox uit
-        }
+    Object.keys(addresses).forEach(wijk => {
+        addresses[wijk].forEach((_, index) => {
+            localStorage.removeItem(`address-${wijk}-${index}-status`);
+            const row = document.getElementById(`row-${wijk}-${index}`);
+            if (row) {
+                row.style.display = "";
+                document.getElementById(`checkbox-${wijk}-${index}`).checked = false;
+            }
+        });
     });
-    saveAddresses(); // Heropslaan van de adressen in localStorage
 }
 
 function saveAddresses() {
     localStorage.setItem("savedAddresses", JSON.stringify(addresses));
 }
 
-// Event listener voor DOMContentLoaded zorgt ervoor dat het script pas wordt uitgevoerd na volledige DOM-lading
 document.addEventListener("DOMContentLoaded", function() {
-    // Als er geen adressen zijn, wordt de loadAddresses functie aangeroepen
     if (!addresses) {
-        loadAddresses();
+        loadAddresses(); // JSON ophalen als localStorage leeg is
     } else {
-        renderAddressList();
+        renderAddressList('wijk1'); // Laad wijk1 bij het opstarten
         renderBeheerList();
     }
-
-    // Reset knop event listener
     document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
+    // Event listener voor wijkkeuze, bijvoorbeeld:
+    document.getElementById("wijk1-button").addEventListener("click", function() {
+        renderAddressList('wijk1');
+    });
+    document.getElementById("wijk2-button").addEventListener("click", function() {
+        renderAddressList('wijk2');
+    });
 });
