@@ -121,26 +121,26 @@
         /* Responsieve weergave */
         @media (max-width: 768px) {
             .tabs button {
-                width: 100%;
+                width: 100%; /* Zorgt ervoor dat de knoppen onder elkaar komen op kleinere schermen */
                 margin-right: 0;
             }
 
             .tab-content {
-                width: 100%;
+                width: 100%; /* Maak de inhoud breder voor kleinere schermen */
                 padding: 15px;
             }
 
             th, td {
-                font-size: 14px;
+                font-size: 14px; /* Kleinere tekst voor kleinere schermen */
                 padding: 10px;
             }
 
             button {
-                width: 100%;
+                width: 100%; /* Maak knoppen breder op kleinere schermen */
             }
 
             table {
-                font-size: 14px;
+                font-size: 14px; /* Kleinere lettergrootte voor tabellen op mobiel */
             }
         }
     </style>
@@ -151,7 +151,6 @@
     <div class="tabs">
         <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
         <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
-        <button id="tab-beheer" onclick="openTab('beheer')">Adressen Beheren</button>
     </div>
 
     <!-- Bezorglijst Wijk 1 -->
@@ -188,25 +187,6 @@
         <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Adressen Beheren -->
-    <div id="beheer-tab" class="tab-content">
-        <h2>Adressen Beheren</h2>
-        <form id="address-form">
-            <label for="name">Naam:</label>
-            <input type="text" id="name" required>
-            <label for="address">Adres:</label>
-            <input type="text" id="address" required>
-            <label for="comment">Opmerkingen:</label>
-            <input type="text" id="comment">
-            <label for="delivered">Bezorgd:</label>
-            <input type="checkbox" id="delivered">
-            <label for="index">Voeg adres in (index):</label>
-            <input type="number" id="index" min="0" placeholder="Laat leeg voor einde lijst">
-            <button type="submit">Adres Toevoegen</button>
-        </form>
-        <div id="beheer-feedback"></div>
-    </div>
-
     <!-- Inladen van adressen.js -->
     <script src="adressen.js"></script>
     <script>
@@ -221,9 +201,7 @@
             document.getElementById("tab-" + tabName).classList.add("active");
 
             // Adressen weergeven voor de actieve wijk
-            if (tabName !== "beheer") {
-                displayAddresses(tabName);
-            }
+            displayAddresses(tabName);
         }
 
         // Adressen weergeven in de tab
@@ -256,38 +234,19 @@
             }
         }
 
-        // Functie om adres toe te voegen
-        document.getElementById("address-form").addEventListener("submit", function(event) {
-            event.preventDefault();
+        // Reset Bezorgstatus functie
+        function resetBezorgstatus(wijk) {
+            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
+            tableRows.forEach(row => {
+                row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
+                row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
+            });
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data.forEach(item => item.delivered = false);
+        }
 
-            const name = document.getElementById("name").value;
-            const address = document.getElementById("address").value;
-            const comment = document.getElementById("comment").value;
-            const delivered = document.getElementById("delivered").checked;
-            const index = parseInt(document.getElementById("index").value) || undefined;
-
-            if (!name || !address) {
-                document.getElementById("beheer-feedback").innerText = "Naam en adres zijn verplicht.";
-                return;
-            }
-
-            const newAddress = {
-                name,
-                address,
-                comment,
-                delivered
-            };
-
-            // Voeg adres toe op de juiste index of aan het einde van de lijst
-            if (index !== undefined && index >= 0) {
-                wijk1Data.splice(index, 0, newAddress);
-            } else {
-                wijk1Data.push(newAddress);
-            }
-
-            displayAddresses("wijk1"); // Weergeven van bijgewerkte lijst
-            document.getElementById("beheer-feedback").innerText = "Adres toegevoegd.";
-        });
+        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
+        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
 
         // Laden van adressen bij het openen van de pagina
         document.addEventListener("DOMContentLoaded", () => {
