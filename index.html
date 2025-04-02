@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="nl">
+<!DOCTYPE html><html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kerkblad HHK Scherpenzeel- Renswoude</title>
     <style>
-        /* Algemene bodystijl */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7fc; /* Lichte achtergrondkleur */
+            background-color: #f4f7fc;
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,39 +14,30 @@
             align-items: center;
             height: 100vh;
         }
-
-        /* Tabbladen styling */
         .tabs {
             display: flex;
             margin-bottom: 20px;
         }
-
         .tabs button {
             padding: 12px 24px;
             cursor: pointer;
             border: 1px solid #ccc;
-            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor tabbladen */
-            color: #00796b; /* Groene tekstkleur */
+            background-color: #e0f7fa;
+            color: #00796b;
             font-size: 16px;
             border-radius: 10px;
             margin-right: 10px;
             transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
         }
-
-        /* Hover-effect voor tabbladen */
         .tabs button:hover {
-            background-color: #4caf50; /* Groene achtergrond bij hover */
+            background-color: #4caf50;
             color: white;
             transform: scale(1.05);
         }
-
-        /* Actieve tabblad styling */
         .tabs button.active {
-            background-color: #00796b; /* Groene achtergrond voor actieve tab */
+            background-color: #00796b;
             color: white;
         }
-
-        /* Tabblad inhoud styling */
         .tab-content {
             display: none;
             width: 80%;
@@ -58,42 +47,32 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
         }
-
-        /* Actieve tabblad inhoud zichtbaar maken */
         .tab-content.active {
             display: block;
         }
-
-        /* Tabelstijl */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-
         th, td {
             padding: 12px;
             border: 1px solid #ddd;
             text-align: left;
             font-size: 16px;
             color: #333;
-            background-color: #fafafa; /* Lichte grijze achtergrond voor cellen */
+            background-color: #fafafa;
         }
-
         th {
-            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor kopjes */
+            background-color: #e0f7fa;
             font-weight: bold;
         }
-
         tr:nth-child(even) {
-            background-color: #f9f9f9; /* Lichtgrijze achtergrond voor even rijen */
+            background-color: #f9f9f9;
         }
-
         tr:hover {
-            background-color: #f1f1f1; /* Subtiele hover-effect op rijen */
+            background-color: #f1f1f1;
         }
-
-        /* Knopstijl */
         button {
             background-color: #4CAF50;
             color: white;
@@ -105,123 +84,92 @@
             margin-top: 20px;
             transition: background-color 0.3s, transform 0.3s;
         }
-
         button:hover {
             background-color: #45a049;
             transform: scale(1.05);
         }
-
-        /* Invoer velden styling */
-        input[type="checkbox"] {
-            margin-left: 10px;
-        }
     </style>
 </head>
 <body>
-
-    <!-- Tabbladen -->
     <div class="tabs">
         <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
         <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
     </div>
-
-    <!-- Bezorglijst Wijk 1 -->
     <div id="wijk1-tab" class="tab-content active">
         <h2>Bezorglijst wijk 1 (Jeroen & Elize)</h2>
-        <table border="1">
+        <table>
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Opmerkingen</th> <!-- Kolom voor opmerkingen komt nu vóór bezorgd -->
-                    <th>Bezorgd</th> <!-- Kolom voor bezorgd komt nu na opmerkingen -->
+                    <th>Opmerkingen</th>
+                    <th>Bezorgd</th>
+                    <th>Acties</th>
                 </tr>
             </thead>
             <tbody id="address-list-wijk1"></tbody>
         </table>
         <button id="reset-button-wijk1">Reset Bezorgstatus</button>
     </div>
-
-    <!-- Bezorglijst Wijk 2 -->
     <div id="wijk2-tab" class="tab-content">
         <h2>Bezorglijst wijk 2 (Jaco & Jo-Anneke)</h2>
-        <table border="1">
+        <table>
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Opmerkingen</th> <!-- Kolom voor opmerkingen komt nu vóór bezorgd -->
-                    <th>Bezorgd</th> <!-- Kolom voor bezorgd komt nu na opmerkingen -->
+                    <th>Opmerkingen</th>
+                    <th>Bezorgd</th>
+                    <th>Acties</th>
                 </tr>
             </thead>
             <tbody id="address-list-wijk2"></tbody>
         </table>
         <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
-
-    <!-- Inladen van adressen.js -->
     <script src="adressen.js"></script>
     <script>
-        // Functie om de actieve tab te openen
-        function openTab(tabName) {
-            // Alle tabbladen verbergen
-            document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
-            document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
-
-            // Actieve tab tonen
-            document.getElementById(tabName + "-tab").classList.add("active");
-            document.getElementById("tab-" + tabName).classList.add("active");
-
-            // Adressen weergeven voor de actieve wijk
-            displayAddresses(tabName);
-        }
-
-        // Adressen weergeven in de tab
         function displayAddresses(wijk) {
             const wijkList = document.getElementById(`address-list-${wijk}`);
-            wijkList.innerHTML = ""; // Maak de lijst eerst leeg
-
+            wijkList.innerHTML = "";
             const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-
             data.forEach((item, index) => {
                 wijkList.innerHTML += `
-                    <tr data-index="${index}">
+                    <tr>
                         <td>${item.name}</td>
                         <td>${item.address}</td>
-                        <td>${item.comment || ''}</td> <!-- Alleen de opmerking weergeven (geen invoerveld) -->
+                        <td>${item.comment || ''}</td>
                         <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
+                        <td>
+                            <button onclick="removeAddress(${wijk === 'wijk1' ? 'wijk1Data' : 'wijk2Data'}, '${item.address}')">❌</button>
+                            <button onclick="showInsertForm('${item.address}')">➕</button>
+                        </td>
                     </tr>
                 `;
             });
         }
-
-        // Functie die wordt aangeroepen wanneer een checkbox wordt aangevinkt
-        function handleCheckboxChange(event, wijk, index) {
-            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-
-            if (event.target.checked) {
-                data[index].delivered = true;
-            } else {
-                data[index].delivered = false;
-            }
+        function showInsertForm(targetAddress) {
+            document.getElementById("insertTarget").value = targetAddress;
+            document.getElementById("insertForm").style.display = "block";
         }
-
-        // Reset Bezorgstatus functie
-        function resetBezorgstatus(wijk) {
-            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
-            tableRows.forEach(row => {
-                row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
-                row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
-            });
-            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-            data.forEach(item => item.delivered = false);
+        function handleInsert() {
+            const targetAddress = document.getElementById("insertTarget").value;
+            const name = document.getElementById("newName").value;
+            const address = document.getElementById("newAddress").value;
+            const comment = document.getElementById("newComment").value;
+            insertAddress(wijk1Data, targetAddress, name, address, comment, true);
+            document.getElementById("insertForm").style.display = "none";
         }
-
-        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
-        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
-
-        // Laden van adressen bij het openen van de pagina
         document.addEventListener("DOMContentLoaded", () => {
+            document.body.insertAdjacentHTML("beforeend", `
+                <div id="insertForm" style="display: none;">
+                    <input type="hidden" id="insertTarget">
+                    Naam: <input type="text" id="newName"><br>
+                    Adres: <input type="text" id="newAddress"><br>
+                    Opmerking: <input type="text" id="newComment"><br>
+                    <button onclick="handleInsert()">✔️</button>
+                </div>
+            `);
             displayAddresses('wijk1');
             displayAddresses('wijk2');
         });
