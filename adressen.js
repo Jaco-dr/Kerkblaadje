@@ -1,7 +1,7 @@
 // Adressen voor wijk 1
 const wijk1Data = [
-    { "name": "Jan Jansen", "address": "Dorpsstraat 1" },
-    { "name": "Piet Pietersen", "address": "Kerklaan 12" }
+    { "name": "Jan Jansen", "address": "Dorpsstraat 1", "comment": "Kerk" },
+    { "name": "Piet Pietersen", "address": "Kerklaan 12", "comment": "" } 
 ];
 
 // Adressen voor wijk 2
