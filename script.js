@@ -26,7 +26,7 @@ function loadAddresses() {
 
 function displayAddresses(wijk) {
     const wijkList = document.getElementById(`address-list-${wijk}`);
-    wijkList.innerHTML = "";
+    wijkList.innerHTML = ""; // Maak de lijst eerst leeg
 
     const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
 
@@ -35,23 +35,22 @@ function displayAddresses(wijk) {
             <tr data-index="${index}">
                 <td>${item.name}</td>
                 <td>${item.address}</td>
-                <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${getCheckboxStatus(wijk, index) ? 'checked' : ''}></td>
+                <td>${item.comment || ''}</td> <!-- Alleen de opmerking weergeven (geen invoerveld) -->
+                <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
             </tr>
         `;
     });
 }
 
-function handleCheckboxChange(event, wijk, index) {
-    const tableRow = event.target.closest('tr');
+function resetBezorgstatus(wijk) {
+    const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
+    tableRows.forEach(row => {
+        row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
+        row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
+    });
     const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-    const isChecked = event.target.checked;
-
-    if (isChecked) {
-        tableRow.style.display = 'none'; // Verberg adres
-    } else {
-        tableRow.style.display = ''; // Laat adres weer zien
-    }
-
+    data.forEach(item => item.delivered = false);
+}
     // Sla de status op in localStorage
     saveCheckboxStatus(wijk, index, isChecked);
 }
