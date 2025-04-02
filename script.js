@@ -19,11 +19,14 @@ let addresses = JSON.parse(localStorage.getItem("savedAddresses"));
 
 if (!addresses) {
     loadAddresses(); // Eerste keer ophalen van JSON als er niks in localStorage staat
+} else {
+    renderAddressList();
+    renderBeheerList();
 }
 
 function renderAddressList() {
     const addressListElement = document.getElementById("address-list");
-    addressListElement.innerHTML = '';
+    addressListElement.innerHTML = ''; // Leeg de lijst voordat we nieuwe data toevoegen
 
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
@@ -35,16 +38,17 @@ function renderAddressList() {
         `;
         addressListElement.appendChild(tr);
 
+        // Check of het adres al is gemarkeerd als 'bezorgd'
         if (localStorage.getItem(`address-${index}-status`) === "bezorgd") {
             document.getElementById(`checkbox-${index}`).checked = true;
-            tr.style.display = "none";
+            tr.style.display = "none"; // Verberg het adres
         }
     });
 }
 
 function renderBeheerList() {
     const beheerListElement = document.getElementById("beheer-list");
-    beheerListElement.innerHTML = '';
+    beheerListElement.innerHTML = ''; // Leeg de beheer lijst
 
     addresses.forEach((address, index) => {
         const tr = document.createElement("tr");
@@ -83,34 +87,42 @@ function toggleAddress(index) {
     const row = document.getElementById(`row-${index}`);
     if (document.getElementById(`checkbox-${index}`).checked) {
         localStorage.setItem(`address-${index}-status`, "bezorgd");
-        row.style.display = "none";
+        row.style.display = "none"; // Verberg het adres na 'bezorgd' markering
     } else {
         localStorage.removeItem(`address-${index}-status`);
-        row.style.display = "";
+        row.style.display = ""; // Maak het adres weer zichtbaar als de checkbox niet is aangevinkt
     }
 }
 
 function resetCheckboxes() {
     addresses.forEach((_, index) => {
+        // Verwijder de status van alle adressen in localStorage
         localStorage.removeItem(`address-${index}-status`);
         const row = document.getElementById(`row-${index}`);
+        const checkbox = document.getElementById(`checkbox-${index}`);
+        
         if (row) {
-            row.style.display = "";
-            document.getElementById(`checkbox-${index}`).checked = false;
+            row.style.display = ""; // Zet de zichtbaarheid van de rij terug naar normaal
+            checkbox.checked = false; // Zet de checkbox uit
         }
     });
+    saveAddresses(); // Heropslaan van de adressen in localStorage
 }
 
 function saveAddresses() {
     localStorage.setItem("savedAddresses", JSON.stringify(addresses));
 }
 
+// Event listener voor DOMContentLoaded zorgt ervoor dat het script pas wordt uitgevoerd na volledige DOM-lading
 document.addEventListener("DOMContentLoaded", function() {
+    // Als er geen adressen zijn, wordt de loadAddresses functie aangeroepen
     if (!addresses) {
-        loadAddresses(); // JSON ophalen als localStorage leeg is
+        loadAddresses();
     } else {
         renderAddressList();
         renderBeheerList();
     }
+
+    // Reset knop event listener
     document.getElementById("reset-button").addEventListener("click", resetCheckboxes);
 });
