@@ -30,15 +30,17 @@ const wijk1Data = [
     { "name": "Fam. van Bruchem", "address": "Druivenkamp 7", "comment": "" },
     { "name": "Fam. v.d. Brink", "address": "Oosteinde 69d", "comment": "" },
     { "name": "Fam. Westeneng", "address": "Gelderse Roos 46", "comment": "" },
-    { "name": "Fam. Leijen", "address": "Rembrandtlaan 84", "comment": "" },
-    { "name": "Fam. Koppe", "address": "Paulus Potterlaan 19", "comment": "" },
-    { "name": "Fam. v.d. Brink", "address": "Paulus Potterlaan 21", "comment": "" },
-    { "name": "Fam. de Kruijf", "address": "Burg. H.v. Konijnenburglaan 34", "comment": "" },
-    { "name": "Fam. Gardenier", "address": "Burg. H.v. Konijnenburglaan 30", "comment": "" },
-    { "name": "Dhr. Kampert", "address": "Burg. H.v. Konijnenburglaan 13", "comment": "" },
-    { "name": "Fam. v.d. Wetering", "address": "Frans Halslaan 20", "comment": "" },
-    { "name": "Fam. Schouten", "address": "Frans Halslaan 34", "comment": "" },
-    { "name": "Fam. de Ruiter", "address": "Burg. H v. Konijnenburglaan 14", "comment": "" }
+    { "name": "Fam. v.d. Merwe", "address": "Fluitekruidlaan 36", "comment": "" },
+    { "name": "Fam. van 't Foort", "address": "Korenveld 5", "comment": "" },
+    { "name": "Fam. van Wijk", "address": "Kamillelaan 8", "comment": "" },
+    { "name": "Fam. Voortman", "address": "Kamillelaan 7", "comment": "" },
+    { "name": "Fam. Boer", "address": "Kamillelaan 11", "comment": "" },
+    { "name": "Fam. van der  Horst", "address": "Kamillelaan 20", "comment": "" },
+    { "name": "Fam. van Driel", "address": "Weideweg 35", "comment": "" },
+    { "name": "Dhr. de Jager", "address": "Zelder 15", "comment": "" },
+
+    { "name": "Fam. de Jager", "address": " Kastanjelaan 33, Renswoude", "comment": "Kerk" },
+    { "name": "Fam. Hazeleger", "address": "Acasialaan 5, Renswoude", "comment": "Kerk" }
 ];
 
 // Adressen voor wijk 2
@@ -62,7 +64,7 @@ const wijk2Data = [
     { "name": "Fam. Heijkamp", "address": "Vierzinnen 18", "comment": "" },
     { "name": "Mw. van Setten", "address": "Lindenlaan 54", "comment": "" },
     { "name": "Mw. Kieft", "address": "Lindenlaan 32", "comment": "" },
-    { "name": "Mw. ten Broek", "address": "Wilgenhof 29", "comment": "" },
+    { "name": "Mw. ten Broek", "address": "Wilgenhof 29", "comment": "Aan de schutting" },
     { "name": "Fam. Gardenier", "address": "Wilgenhof 33", "comment": "" },
     { "name": "Fam. Geurtsen", "address": "Willaerlaan 50", "comment": "" },
     { "name": "Dhr. Versteeg", "address": "Pr Irenelaan 32", "comment": "" },
