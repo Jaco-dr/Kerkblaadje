@@ -1,1 +1,1 @@
-# krantenwijk
+# HHk Scherpenzeel kerkblad
