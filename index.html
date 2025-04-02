@@ -3,23 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerkblad HHK Scherpenzeel - Renswoude</title>
+    <title>Kerkblad HHK Scherpenzeel- Renswoude</title>
     <style>
-        /* Jouw CSS-code blijft hier hetzelfde */
+        /* Algemene bodystijl */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7fc; /* Lichte achtergrondkleur */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Tabbladen styling */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor tabbladen */
+            color: #00796b; /* Groene tekstkleur */
+            font-size: 16px;
+            border-radius: 10px;
+            margin-right: 10px;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
+        }
+
+        /* Hover-effect voor tabbladen */
+        .tabs button:hover {
+            background-color: #4caf50; /* Groene achtergrond bij hover */
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Actieve tabblad styling */
+        .tabs button.active {
+            background-color: #00796b; /* Groene achtergrond voor actieve tab */
+            color: white;
+        }
+
+        /* Tabblad inhoud styling */
+        .tab-content {
+            display: none;
+            width: 80%;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        /* Actieve tabblad inhoud zichtbaar maken */
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tabelstijl */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa; /* Lichte grijze achtergrond voor cellen */
+        }
+
+        th {
+            background-color: #e0f7fa; /* Lichte blauwe achtergrond voor kopjes */
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Lichtgrijze achtergrond voor even rijen */
+        }
+
+        tr:hover {
+            background-color: #f1f1f1; /* Subtiele hover-effect op rijen */
+        }
+
+        /* Knopstijl */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        /* Invoer velden styling */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Tabs -->
+    <!-- Tabbladen -->
     <div class="tabs">
-        <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst wijk 1</button>
-        <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst wijk 2</button>
+        <button id="tab-addresses" class="active" onclick="openTab('addresses')">Bezorglijst</button>
+        <button id="tab-beheer" onclick="openTab('beheer')">Adres Beheer</button>
     </div>
 
-    <!-- Bezorglijst Wijk 1 -->
-    <div id="wijk1-tab" class="tab-content active">
-        <h2>Bezorglijst Wijk 1</h2>
-        <table>
+    <!-- Bezorglijst Tabblad -->
+    <div id="addresses-tab" class="tab-content active">
+        <h2>Bezorglijst</h2>
+        <table border="1">
             <thead>
                 <tr>
                     <th>Naam</th>
@@ -27,31 +148,34 @@
                     <th>Bezorgd</th>
                 </tr>
             </thead>
-            <tbody id="address-list-wijk1"></tbody>
+            <tbody id="address-list"></tbody>
         </table>
-        <button id="reset-button-wijk1">Reset Bezorgstatus</button>
+        <button id="reset-button">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Bezorglijst Wijk 2 -->
-    <div id="wijk2-tab" class="tab-content">
-        <h2>Bezorglijst Wijk 2</h2>
-        <table>
+    <!-- Adres Beheer Tabblad -->
+    <div id="beheer-tab" class="tab-content">
+        <h2>Adres Beheer</h2>
+        <table border="1">
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Bezorgd</th>
+                    <th>Actie</th>
                 </tr>
             </thead>
-            <tbody id="address-list-wijk2"></tbody>
+            <tbody id="beheer-list"></tbody>
         </table>
-        <button id="reset-button-wijk2">Reset Bezorgstatus</button>
+
+        <h3>Nieuw Adres Toevoegen</h3>
+        <input type="text" id="new-name" placeholder="Naam">
+        <input type="text" id="new-address" placeholder="Adres">
+        <button onclick="addAddress()">Toevoegen</button>
     </div>
 
-    <script src="adressen.js"></script> <!-- Verwijzing naar het aparte JavaScript-bestand -->
+    <script src="script.js"></script>
     <script>
-        // Je bestaande JavaScript-code blijft hier hetzelfde
-
+        // JavaScript voor tabbladen
         function openTab(tabName) {
             // Alle tabbladen verbergen
             document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
@@ -62,54 +186,53 @@
             document.getElementById("tab-" + tabName).classList.add("active");
         }
 
-        // Adressen weergeven in de tab
-        function displayAddresses(wijk) {
-            const wijkList = document.getElementById(`address-list-${wijk}`);
-            wijkList.innerHTML = "";
+        // Dummy data voor adreslijst (Deze kun je vervangen door je eigen data)
+        const addressData = [
+            { name: "Jan Jansen", address: "Dorpsstraat 1", delivered: false },
+            { name: "Piet Pietersen", address: "Kerklaan 12", delivered: false }
+        ];
 
-            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+        // Adressen weergeven
+        function displayAddresses() {
+            const addressList = document.getElementById("address-list");
+            addressList.innerHTML = "";
 
-            data.forEach((item, index) => {
-                wijkList.innerHTML += `
-                    <tr data-index="${index}">
+            addressData.forEach((item, index) => {
+                addressList.innerHTML += `
+                    <tr>
                         <td>${item.name}</td>
                         <td>${item.address}</td>
-                        <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})"></td>
+                        <td><input type="checkbox" onchange="handleCheckboxChange(event, ${index})" ${item.delivered ? 'checked' : ''}></td>
                     </tr>
                 `;
             });
         }
 
-        // Functie die wordt aangeroepen wanneer een checkbox wordt aangevinkt
-        function handleCheckboxChange(event, wijk, index) {
-            const tableRow = event.target.closest('tr');
-            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+        // Functie om checkbox status te beheren
+        function handleCheckboxChange(event, index) {
+            addressData[index].delivered = event.target.checked;
+        }
 
-            if (event.target.checked) {
-                // Verwijder het adres uit de lijst
-                tableRow.style.display = 'none';
-            } else {
-                // Zet het adres terug in de lijst
-                tableRow.style.display = '';
+        // Reset bezorgstatus
+        document.getElementById("reset-button").addEventListener("click", () => {
+            addressData.forEach(item => item.delivered = false);
+            displayAddresses();
+        });
+
+        // Adres toevoegen
+        function addAddress() {
+            const name = document.getElementById("new-name").value;
+            const address = document.getElementById("new-address").value;
+
+            if (name && address) {
+                addressData.push({ name, address, delivered: false });
+                displayAddresses();
             }
         }
 
-        // Reset Bezorgstatus functie
-        function resetBezorgstatus(wijk) {
-            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
-            tableRows.forEach(row => {
-                row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
-                row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
-            });
-        }
-
-        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
-        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
-
-        // Laden van adressen bij het openen van de pagina
+        // Initialiseer pagina
         document.addEventListener("DOMContentLoaded", () => {
-            displayAddresses('wijk1');
-            displayAddresses('wijk2');
+            displayAddresses();
         });
     </script>
 </body>
