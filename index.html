@@ -133,13 +133,13 @@
 
     <!-- Tabbladen -->
     <div class="tabs">
-        <button id="tab-addresses" class="active" onclick="openTab('addresses')">Bezorglijst</button>
-        <button id="tab-beheer" onclick="openTab('beheer')">Adres Beheer</button>
+        <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
+        <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
     </div>
 
-    <!-- Bezorglijst Tabblad -->
-    <div id="addresses-tab" class="tab-content active">
-        <h2>Bezorglijst</h2>
+    <!-- Bezorglijst Wijk 1 -->
+    <div id="wijk1-tab" class="tab-content active">
+        <h2>Bezorglijst Wijk 1</h2>
         <table border="1">
             <thead>
                 <tr>
@@ -148,34 +148,39 @@
                     <th>Bezorgd</th>
                 </tr>
             </thead>
-            <tbody id="address-list"></tbody>
+            <tbody id="address-list-wijk1"></tbody>
         </table>
-        <button id="reset-button">Reset Bezorgstatus</button>
+        <button id="reset-button-wijk1">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Adres Beheer Tabblad -->
-    <div id="beheer-tab" class="tab-content">
-        <h2>Adres Beheer</h2>
+    <!-- Bezorglijst Wijk 2 -->
+    <div id="wijk2-tab" class="tab-content">
+        <h2>Bezorglijst Wijk 2</h2>
         <table border="1">
             <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Actie</th>
+                    <th>Bezorgd</th>
                 </tr>
             </thead>
-            <tbody id="beheer-list"></tbody>
+            <tbody id="address-list-wijk2"></tbody>
         </table>
-
-        <h3>Nieuw Adres Toevoegen</h3>
-        <input type="text" id="new-name" placeholder="Naam">
-        <input type="text" id="new-address" placeholder="Adres">
-        <button onclick="addAddress()">Toevoegen</button>
+        <button id="reset-button-wijk2">Reset Bezorgstatus</button>
     </div>
 
-    <script src="script.js"></script>
     <script>
-        // JavaScript voor tabbladen
+        let wijk1Data = [
+            { name: "Jan Jansen", address: "Dorpsstraat 1", delivered: false },
+            { name: "Piet Pietersen", address: "Kerklaan 12", delivered: false }
+        ];
+        
+        let wijk2Data = [
+            { name: "Henk de Vries", address: "Laan 34", delivered: false },
+            { name: "Sophie Jansen", address: "Hoofdstraat 56", delivered: false }
+        ];
+
+        // Functie om de actieve tab te openen
         function openTab(tabName) {
             // Alle tabbladen verbergen
             document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
@@ -186,53 +191,57 @@
             document.getElementById("tab-" + tabName).classList.add("active");
         }
 
-        // Dummy data voor adreslijst (Deze kun je vervangen door je eigen data)
-        const addressData = [
-            { name: "Jan Jansen", address: "Dorpsstraat 1", delivered: false },
-            { name: "Piet Pietersen", address: "Kerklaan 12", delivered: false }
-        ];
+        // Adressen weergeven in de tab
+        function displayAddresses(wijk) {
+            const wijkList = document.getElementById(`address-list-${wijk}`);
+            wijkList.innerHTML = "";
 
-        // Adressen weergeven
-        function displayAddresses() {
-            const addressList = document.getElementById("address-list");
-            addressList.innerHTML = "";
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
 
-            addressData.forEach((item, index) => {
-                addressList.innerHTML += `
-                    <tr>
+            data.forEach((item, index) => {
+                wijkList.innerHTML += `
+                    <tr data-index="${index}">
                         <td>${item.name}</td>
                         <td>${item.address}</td>
-                        <td><input type="checkbox" onchange="handleCheckboxChange(event, ${index})" ${item.delivered ? 'checked' : ''}></td>
+                        <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
                     </tr>
                 `;
             });
         }
 
-        // Functie om checkbox status te beheren
-        function handleCheckboxChange(event, index) {
-            addressData[index].delivered = event.target.checked;
-        }
+        // Functie die wordt aangeroepen wanneer een checkbox wordt aangevinkt
+        function handleCheckboxChange(event, wijk, index) {
+            const tableRow = event.target.closest('tr');
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
 
-        // Reset bezorgstatus
-        document.getElementById("reset-button").addEventListener("click", () => {
-            addressData.forEach(item => item.delivered = false);
-            displayAddresses();
-        });
-
-        // Adres toevoegen
-        function addAddress() {
-            const name = document.getElementById("new-name").value;
-            const address = document.getElementById("new-address").value;
-
-            if (name && address) {
-                addressData.push({ name, address, delivered: false });
-                displayAddresses();
+            if (event.target.checked) {
+                // Markeer het adres als bezorgd
+                data[index].delivered = true;
+            } else {
+                // Zet het adres terug naar niet bezorgd
+                data[index].delivered = false;
             }
         }
 
-        // Initialiseer pagina
+        // Reset Bezorgstatus functie
+        function resetBezorgstatus(wijk) {
+            const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
+            tableRows.forEach(row => {
+                row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
+                row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
+            });
+            // Reset de data naar de oorspronkelijke status
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data.forEach(item => item.delivered = false);
+        }
+
+        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
+        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
+
+        // Laden van adressen bij het openen van de pagina
         document.addEventListener("DOMContentLoaded", () => {
-            displayAddresses();
+            displayAddresses('wijk1');
+            displayAddresses('wijk2');
         });
     </script>
 </body>
