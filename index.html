@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kerkblad HHK Scherpenzeel-Renswoude</title>
+    <title>Kerkblad HHK Scherpenzeel- Renswoude</title>
     <style>
-        /* Algemene body stijl */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7fc;
@@ -17,68 +16,62 @@
             min-height: 100vh;
         }
 
-        /* Tabbladen styling */
         .tabs {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 10px;
-            width: 100%;
+            margin-bottom: 20px;
         }
 
         .tabs button {
-            flex: 1;
-            min-width: 120px;
-            padding: 12px;
+            padding: 12px 24px;
             cursor: pointer;
-            border: none;
-            background-color: #00796b;
-            color: white;
+            border: 1px solid #ccc;
+            background-color: #e0f7fa;
+            color: #00796b;
             font-size: 16px;
             border-radius: 10px;
             margin: 5px;
-            transition: background-color 0.3s, transform 0.2s ease;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s ease;
         }
 
         .tabs button:hover, .tabs button.active {
-            background-color: #004d40;
-            transform: scale(1.05);
+            background-color: #00796b;
+            color: white;
         }
 
-        /* Tabblad inhoud styling */
         .tab-content {
             display: none;
             width: 90%;
             max-width: 600px;
             background-color: white;
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Tabelstijl */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         th, td {
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
             text-align: left;
-            font-size: 14px;
+            font-size: 16px;
+            color: #333;
             background-color: #fafafa;
         }
 
         th {
-            background-color: #00796b;
-            color: white;
+            background-color: #e0f7fa;
             font-weight: bold;
         }
 
@@ -89,53 +82,17 @@
         tr:hover {
             background-color: #f1f1f1;
         }
-
-        /* Knopstijl */
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        button:hover {
-            background-color: #388E3C;
-            transform: scale(1.05);
-        }
-
-        /* Mobiele optimalisatie */
-        @media (max-width: 600px) {
-            th, td {
-                font-size: 14px;
-                padding: 8px;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .tabs button {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <!-- Tabbladen -->
     <div class="tabs">
         <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
         <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
     </div>
 
-    <!-- Bezorglijst Wijk 1 -->
     <div id="wijk1-tab" class="tab-content active">
-        <h2>Bezorglijst Wijk 1</h2>
+        <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
         <table>
             <thead>
                 <tr>
@@ -147,12 +104,11 @@
             </thead>
             <tbody id="address-list-wijk1"></tbody>
         </table>
-        <button id="reset-button-wijk1">Reset Bezorgstatus</button>
+        <button onclick="resetBezorgstatus('wijk1')">Reset Bezorgstatus</button>
     </div>
 
-    <!-- Bezorglijst Wijk 2 -->
     <div id="wijk2-tab" class="tab-content">
-        <h2>Bezorglijst Wijk 2</h2>
+        <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
         <table>
             <thead>
                 <tr>
@@ -164,20 +120,57 @@
             </thead>
             <tbody id="address-list-wijk2"></tbody>
         </table>
-        <button id="reset-button-wijk2">Reset Bezorgstatus</button>
+        <button onclick="resetBezorgstatus('wijk2')">Reset Bezorgstatus</button>
     </div>
 
     <script>
-        function openTab(tabName) {
+        let wijk1Data = [
+            { name: "Jan Jansen", address: "Dorpsstraat 1", comment: "Let op hond", delivered: false },
+            { name: "Piet Pieters", address: "Kerklaan 5", comment: "Geen voorkeur", delivered: false }
+        ];
+
+        let wijk2Data = [
+            { name: "Klaas Klaassen", address: "Marktplein 3", comment: "Afgeven bij buren", delivered: false }
+        ];
+
+        function openTab(wijk) {
             document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
             document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
-            
-            document.getElementById(tabName + "-tab").classList.add("active");
-            document.getElementById("tab-" + tabName).classList.add("active");
+            document.getElementById(wijk + "-tab").classList.add("active");
+            document.getElementById("tab-" + wijk).classList.add("active");
+            displayAddresses(wijk);
         }
 
-        document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
-        document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
+        function displayAddresses(wijk) {
+            let wijkList = document.getElementById(`address-list-${wijk}`);
+            wijkList.innerHTML = "";
+            let data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data.forEach((item, index) => {
+                wijkList.innerHTML += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.address}</td>
+                        <td>${item.comment}</td>
+                        <td><input type="checkbox" ${item.delivered ? 'checked' : ''} onchange="updateStatus('${wijk}', ${index})"></td>
+                    </tr>`;
+            });
+        }
+
+        function updateStatus(wijk, index) {
+            let data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data[index].delivered = !data[index].delivered;
+        }
+
+        function resetBezorgstatus(wijk) {
+            let data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data.forEach(item => item.delivered = false);
+            displayAddresses(wijk);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            displayAddresses('wijk1');
+            displayAddresses('wijk2');
+        });
     </script>
 </body>
 </html>
