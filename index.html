@@ -146,6 +146,7 @@
                     <th>Naam</th>
                     <th>Adres</th>
                     <th>Bezorgd</th>
+                    <th>Opmerkingen</th> <!-- Nieuwe kolom voor opmerkingen -->
                 </tr>
             </thead>
             <tbody id="address-list-wijk1"></tbody>
@@ -162,6 +163,7 @@
                     <th>Naam</th>
                     <th>Adres</th>
                     <th>Bezorgd</th>
+                    <th>Opmerkingen</th> <!-- Nieuwe kolom voor opmerkingen -->
                 </tr>
             </thead>
             <tbody id="address-list-wijk2"></tbody>
@@ -199,6 +201,7 @@
                         <td>${item.name}</td>
                         <td>${item.address}</td>
                         <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
+                        <td><input type="text" value="${item.comment || ''}" onchange="handleCommentChange(event, '${wijk}', ${index})"></td> <!-- Opmerkingen veld -->
                     </tr>
                 `;
             });
@@ -213,6 +216,12 @@
             } else {
                 data[index].delivered = false;
             }
+        }
+
+        // Functie om de opmerking bij te werken
+        function handleCommentChange(event, wijk, index) {
+            const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+            data[index].comment = event.target.value;
         }
 
         // Reset Bezorgstatus functie
