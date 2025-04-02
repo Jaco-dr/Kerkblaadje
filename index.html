@@ -145,8 +145,8 @@
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Bezorgd</th>
-                    <th>Opmerkingen</th> <!-- Nieuwe kolom voor opmerkingen -->
+                    <th>Opmerkingen</th> <!-- Kolom voor opmerkingen komt nu vóór bezorgd -->
+                    <th>Bezorgd</th> <!-- Kolom voor bezorgd komt nu na opmerkingen -->
                 </tr>
             </thead>
             <tbody id="address-list-wijk1"></tbody>
@@ -162,8 +162,8 @@
                 <tr>
                     <th>Naam</th>
                     <th>Adres</th>
-                    <th>Bezorgd</th>
-                    <th>Opmerkingen</th> <!-- Nieuwe kolom voor opmerkingen -->
+                    <th>Opmerkingen</th> <!-- Kolom voor opmerkingen komt nu vóór bezorgd -->
+                    <th>Bezorgd</th> <!-- Kolom voor bezorgd komt nu na opmerkingen -->
                 </tr>
             </thead>
             <tbody id="address-list-wijk2"></tbody>
@@ -200,8 +200,8 @@
                     <tr data-index="${index}">
                         <td>${item.name}</td>
                         <td>${item.address}</td>
-                        <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
                         <td><input type="text" value="${item.comment || ''}" onchange="handleCommentChange(event, '${wijk}', ${index})"></td> <!-- Opmerkingen veld -->
+                        <td><input type="checkbox" onchange="handleCheckboxChange(event, '${wijk}', ${index})" ${item.delivered ? 'checked' : ''}></td>
                     </tr>
                 `;
             });
