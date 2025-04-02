@@ -114,7 +114,7 @@
 
     <!-- Bezorglijst Wijk 1 -->
     <div id="wijk1-tab" class="tab-content active">
-        <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
+        <h2>Bezorglijst Wijk 1</h2>
         <table>
             <thead>
                 <tr>
@@ -130,7 +130,7 @@
 
     <!-- Bezorglijst Wijk 2 -->
     <div id="wijk2-tab" class="tab-content">
-        <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
+        <h2>Bezorglijst Wijk 2</h2>
         <table>
             <thead>
                 <tr>
@@ -155,34 +155,34 @@
             document.getElementById("tab-" + tabName).classList.add("active");
         }
 
-        // Laden van JSON-data (simulatie)
-        const addresses = {
-            "wijk1": [
-                { naam: "Jan Jansen", adres: "Dorpsstraat 1" },
-                { naam: "Piet Pietersen", adres: "Kerklaan 12" }
-            ],
-            "wijk2": [
-                { naam: "Lisa de Vries", adres: "Hoofdweg 34" },
-                { naam: "Bram de Boer", adres: "Molenweg 5" }
-            ]
-        };
-
+        // Functie om adressen te laden van een extern JSON bestand
         function loadAddresses() {
-            const wijk1List = document.getElementById("address-list-wijk1");
-            const wijk2List = document.getElementById("address-list-wijk2");
+            fetch('adressen.json') // URL naar je JSON-bestand
+                .then(response => response.json())
+                .then(data => {
+                    const wijk1List = document.getElementById("address-list-wijk1");
+                    const wijk2List = document.getElementById("address-list-wijk2");
 
-            wijk1List.innerHTML = "";
-            wijk2List.innerHTML = "";
+                    // Leegmaken van de tabbladen
+                    wijk1List.innerHTML = "";
+                    wijk2List.innerHTML = "";
 
-            addresses.wijk1.forEach(item => {
-                wijk1List.innerHTML += `<tr><td>${item.naam}</td><td>${item.adres}</td><td><input type="checkbox"></td></tr>`;
-            });
+                    // Wijk 1 Adressen toevoegen
+                    data.wijk1.forEach(item => {
+                        wijk1List.innerHTML += `<tr><td>${item.name}</td><td>${item.address}</td><td><input type="checkbox"></td></tr>`;
+                    });
 
-            addresses.wijk2.forEach(item => {
-                wijk2List.innerHTML += `<tr><td>${item.naam}</td><td>${item.adres}</td><td><input type="checkbox"></td></tr>`;
-            });
+                    // Wijk 2 Adressen toevoegen
+                    data.wijk2.forEach(item => {
+                        wijk2List.innerHTML += `<tr><td>${item.name}</td><td>${item.address}</td><td><input type="checkbox"></td></tr>`;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading the JSON file:', error);
+                });
         }
 
+        // Reset Bezorgstatus functie
         function resetBezorgstatus(wijk) {
             const checkboxes = document.querySelectorAll(`#address-list-${wijk} input[type="checkbox"]`);
             checkboxes.forEach(checkbox => checkbox.checked = false);
@@ -191,7 +191,7 @@
         document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
         document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
 
-        // Laden van adressen bij start
+        // Laden van adressen bij het openen van de pagina
         document.addEventListener("DOMContentLoaded", loadAddresses);
     </script>
 </body>
