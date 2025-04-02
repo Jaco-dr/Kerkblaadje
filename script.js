@@ -42,19 +42,6 @@ function displayAddresses(wijk) {
     });
 }
 
-function resetBezorgstatus(wijk) {
-    const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
-    tableRows.forEach(row => {
-        row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
-        row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
-    });
-    const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
-    data.forEach(item => item.delivered = false);
-}
-    // Sla de status op in localStorage
-    saveCheckboxStatus(wijk, index, isChecked);
-}
-
 function saveCheckboxStatus(wijk, index, status) {
     localStorage.setItem(`checkbox-status-${wijk}-${index}`, status);
 }
@@ -67,10 +54,10 @@ function resetBezorgstatus(wijk) {
     const tableRows = document.querySelectorAll(`#address-list-${wijk} tr`);
     tableRows.forEach(row => {
         row.style.display = '';  // Zorg ervoor dat alle rijen zichtbaar zijn
-        const checkbox = row.querySelector('input[type="checkbox"]');
-        checkbox.checked = false; // Zet de checkbox uit
-        saveCheckboxStatus(wijk, row.dataset.index, false); // Reset de status in localStorage
+        row.querySelector('input[type="checkbox"]').checked = false; // Zet de checkbox uit
     });
+    const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+    data.forEach(item => item.delivered = false);
 }
 
 document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
