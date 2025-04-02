@@ -18,6 +18,8 @@
         .tabs {
             display: flex;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Dit maakt de tabs flexibel voor kleinere schermen */
+            justify-content: center;
         }
         .tabs button {
             padding: 12px 24px;
@@ -28,6 +30,9 @@
             font-size: 16px;
             border-radius: 10px;
             margin-right: 10px;
+            flex: 1 1 45%; /* Dit zorgt ervoor dat de knoppen kleiner worden op mobiele apparaten */
+            max-width: 300px;
+            margin-bottom: 10px;
         }
         .tabs button.active {
             background-color: #00796b;
@@ -35,12 +40,13 @@
         }
         .tab-content {
             display: none;
-            width: 80%;
+            width: 100%;
             background-color: white;
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
+            overflow-x: auto;
         }
         .tab-content.active {
             display: block;
@@ -70,6 +76,34 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 20px;
+        }
+
+        /* Media Queries voor kleinere schermen */
+        @media (max-width: 768px) {
+            .tabs button {
+                font-size: 14px;
+                padding: 10px 20px;
+                margin-bottom: 5px;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .tabs {
+                flex-direction: column;
+            }
+            .tabs button {
+                width: 100%; /* Knoppen nemen nu de volledige breedte van het scherm */
+                margin-right: 0;
+            }
         }
     </style>
 </head>
