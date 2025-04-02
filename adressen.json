@@ -1,4 +1,10 @@
-[
+
+{
+    "wijk1": [
+        { "name": "Jan Jansen", "address": "Dorpsstraat 1" },
+        { "name": "Piet Pietersen", "address": "Kerklaan 12" }
+    ],
+    "wijk2": [
   { "name": "Mw. van de Broek", "address": "Vermeerlaan 1" },
   { "name": "Wilmar Hardeman", "address": "Glashorst 46" },
   { "name": "Fam. Wisse", "address": "Glashorst 68" },
