@@ -1,0 +1,47 @@
+.card {
+    background: white;
+    margin-bottom: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card.done {
+    background: #e8f5e9;
+    opacity: 0.8;
+}
+
+.card-header {
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.card-address {
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.card-comment {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background: #00796b;
+    color: white;
+}
+
+.card-actions button:hover {
+    background: #004d40;
+}
