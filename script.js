@@ -1,6 +1,19 @@
+<script>
 let appData = { wijk1: [], wijk2: [] };
-let editingIndex = null;
-let editingWijk = null;
+
+// --- Adres netjes maken ---
+function formatAddress(address) {
+    if (!address) return "";
+
+    address = address.trim();
+
+    // Split op komma → nieuwe regel
+    if (address.includes(",")) {
+        return address.split(",").map(a => a.trim()).join("<br>");
+    }
+
+    return address;
+}
 
 // --- Tabbladen ---
 function openTab(tabName) {
@@ -10,118 +23,130 @@ function openTab(tabName) {
     document.getElementById("tab-" + tabName).classList.add("active");
 }
 
-// --- Laad adressen ---
+// --- Laden (JSON → localStorage) ---
 function loadAddresses() {
-    const storedData = JSON.parse(localStorage.getItem("kerbode"));
-    if (storedData) {
-        appData = storedData;
-        displayAddresses('wijk1');
-        displayAddresses('wijk2');
+    const stored = localStorage.getItem("kerbode");
+
+    if (stored) {
+        appData = JSON.parse(stored);
+        displayAddresses("wijk1");
+        displayAddresses("wijk2");
     } else {
-        fetch('adressen.json')
-            .then(response => response.json())
-            .then(data => {
-                appData.wijk1 = data.wijk1.map(a => ({ ...a, delivered: false }));
-                appData.wijk2 = data.wijk2.map(a => ({ ...a, delivered: false }));
-                localStorage.setItem("kerbode", JSON.stringify(appData));
-                displayAddresses('wijk1');
-                displayAddresses('wijk2');
-            })
-            .catch(error => console.error('Error loading JSON:', error));
+        // jouw arrays gebruiken
+        appData.wijk1 = wijk1Data.map(a => ({
+            ...a,
+            address: a.address.trim(),
+            delivered: false
+        }));
+
+        appData.wijk2 = wijk2Data.map(a => ({
+            ...a,
+            address: a.address.trim(),
+            delivered: false
+        }));
+
+        saveData();
+        displayAddresses("wijk1");
+        displayAddresses("wijk2");
     }
 }
 
-// --- Adressen tonen ---
+// --- Opslaan ---
+function saveData() {
+    localStorage.setItem("kerbode", JSON.stringify(appData));
+}
+
+// --- Tonen ---
 function displayAddresses(wijk) {
-    const listEl = document.getElementById(`address-list-${wijk}`);
-    listEl.innerHTML = "";
+    const tbody = document.getElementById(`address-list-${wijk}`);
+    tbody.innerHTML = "";
+
     appData[wijk].forEach((item, index) => {
-        listEl.innerHTML += `
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.address}</td>
-                <td>${item.comment || ''}</td>
-                <td><input type="checkbox" onchange="handleCheckboxChange('${wijk}', ${index}, this.checked)" ${item.delivered ? 'checked' : ''}></td>
-                <td>
-                    <button class="action" onclick="editAddress('${wijk}', ${index})">✏️</button>
-                    <button class="action" onclick="deleteAddress('${wijk}', ${index})">❌</button>
-                </td>
-            </tr>
-        `;
+        tbody.innerHTML += `
+        <tr>
+            <td>${item.name}</td>
+            <td>${formatAddress(item.address)}</td>
+            <td>${item.comment || ''}</td>
+            <td>
+                <input type="checkbox" ${item.delivered ? 'checked' : ''}
+                onchange="toggleDelivered('${wijk}', ${index}, this.checked)">
+            </td>
+            <td>
+                <button class="action" onclick="editRow('${wijk}', ${index}, this)">✏️</button>
+                <button class="action" onclick="deleteRow('${wijk}', ${index})">❌</button>
+            </td>
+        </tr>`;
     });
 }
 
-// --- Checkbox verandering ---
-function handleCheckboxChange(wijk, index, checked) {
+// --- Checkbox ---
+function toggleDelivered(wijk, index, checked) {
     appData[wijk][index].delivered = checked;
-    localStorage.setItem("kerbode", JSON.stringify(appData));
+    saveData();
 }
 
-// --- Reset bezorgstatus ---
+// --- Reset ---
 function resetBezorgstatus(wijk) {
     appData[wijk].forEach(item => item.delivered = false);
-    localStorage.setItem("kerbode", JSON.stringify(appData));
-    displayAddresses(wijk);
-}
-
-// --- Adres toevoegen/bewerken ---
-function saveAddress() {
-    const name = document.getElementById("name").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const comment = document.getElementById("comment").value.trim();
-    const wijk = document.getElementById("wijk").value;
-
-    if (!name || !address) {
-        alert("Naam en adres zijn verplicht.");
-        return;
-    }
-
-    const newItem = { name, address, comment, delivered: false };
-
-    if (editingIndex !== null && editingWijk === wijk) {
-        appData[wijk][editingIndex] = newItem;
-        editingIndex = null;
-        editingWijk = null;
-    } else {
-        appData[wijk].push(newItem);
-    }
-
-    clearForm();
-    localStorage.setItem("kerbode", JSON.stringify(appData));
+    saveData();
     displayAddresses(wijk);
 }
 
 // --- Bewerken ---
-function editAddress(wijk, index) {
+function editRow(wijk, index, btn) {
+    const row = btn.closest("tr");
     const item = appData[wijk][index];
-    document.getElementById("name").value = item.name;
-    document.getElementById("address").value = item.address;
-    document.getElementById("comment").value = item.comment;
-    document.getElementById("wijk").value = wijk;
-    editingIndex = index;
-    editingWijk = wijk;
+
+    row.innerHTML = `
+        <td><input type="text" value="${item.name}"></td>
+        <td><input type="text" value="${item.address}"></td>
+        <td><input type="text" value="${item.comment || ''}"></td>
+        <td><input type="checkbox" ${item.delivered ? 'checked' : ''}></td>
+        <td>
+            <button class="action" onclick="saveRow('${wijk}', ${index}, this)">💾</button>
+            <button class="action" onclick="displayAddresses('${wijk}')">✖️</button>
+        </td>`;
 }
 
-// --- Verwijderen ---
-function deleteAddress(wijk, index) {
-    if (!confirm("Weet je het zeker dat je dit adres wilt verwijderen?")) return;
-    appData[wijk].splice(index, 1);
-    localStorage.setItem("kerbode", JSON.stringify(appData));
+// --- Opslaan na bewerken ---
+function saveRow(wijk, index, btn) {
+    const row = btn.closest("tr");
+    const inputs = row.querySelectorAll("input");
+
+    appData[wijk][index] = {
+        name: inputs[0].value.trim(),
+        address: inputs[1].value.trim(),
+        comment: inputs[2].value.trim(),
+        delivered: inputs[3].checked
+    };
+
+    saveData();
     displayAddresses(wijk);
 }
 
-// --- Formulier resetten ---
-function clearForm() {
-    document.getElementById("name").value = "";
-    document.getElementById("address").value = "";
-    document.getElementById("comment").value = "";
-    editingIndex = null;
-    editingWijk = null;
+// --- Verwijderen ---
+function deleteRow(wijk, index) {
+    if (!confirm("Weet je zeker dat je dit adres wilt verwijderen?")) return;
+
+    appData[wijk].splice(index, 1);
+    saveData();
+    displayAddresses(wijk);
 }
 
-// --- Event listeners resetknoppen ---
-document.getElementById("reset-button-wijk1").addEventListener("click", () => resetBezorgstatus("wijk1"));
-document.getElementById("reset-button-wijk2").addEventListener("click", () => resetBezorgstatus("wijk2"));
+// --- Nieuwe rij ---
+function addNewRow(wijk) {
+    appData[wijk].push({
+        name: "",
+        address: "",
+        comment: "",
+        delivered: false
+    });
 
-// --- Initialisatie bij laden pagina ---
+    const index = appData[wijk].length - 1;
+    displayAddresses(wijk);
+    editRow(wijk, index);
+}
+
+// --- Init ---
 document.addEventListener("DOMContentLoaded", loadAddresses);
+</script>
