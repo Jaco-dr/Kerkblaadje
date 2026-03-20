@@ -1,5 +1,8 @@
+/* Global box-sizing for predictable sizing */
+* { box-sizing: border-box; }
+
 .card {
-    background: white;
+    background: #fff;
     margin-bottom: 12px;
     padding: 14px;
     border-radius: 12px;
@@ -8,7 +11,7 @@
 
 .card.done {
     background: #e8f5e9;
-    opacity: 0.8;
+    /* avoid using opacity which reduces text contrast */
 }
 
 .card-header {
@@ -29,12 +32,13 @@
 
 .card-actions {
     display: flex;
-    gap: 8px;
+    gap: 8px; /* supported in modern browsers */
 }
 
 .card-actions button {
     flex: 1;
     padding: 12px;
+    min-height: 44px; /* ensure adequate tap target */
     font-size: 16px;
     border-radius: 10px;
     border: none;
@@ -45,3 +49,22 @@
 .card-actions button:hover {
     background: #004d40;
 }
+
+.card-actions button:focus-visible {
+    outline: 3px solid rgba(0,150,136,0.25);
+    outline-offset: 2px;
+}
+
+/* Fallback for older browsers that don't support gap on flex */
+.card-actions > * + * {
+  margin-left: 8px;
+}
+
+/* Simple responsive tweaks for very small screens */
+@media (max-width: 360px) {
+  .card { padding: 10px; }
+  .card-header { font-size: 16px; }
+  .card-comment { font-size: 12px; }
+}
+
+/* Note: ensure your HTML includes: <meta name="viewport" content="width=device-width,initial-scale=1"> 
