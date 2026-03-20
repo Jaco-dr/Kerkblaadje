@@ -1,92 +1,22 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kerkblad HHK Scherpenzeel- Renswoude</title>
-<style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f7fc;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
-.tabs { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
-.tabs button {
-    padding: 12px 24px; cursor: pointer; border: 1px solid #ccc; background-color: #e0f7fa; color: #00796b; font-size: 16px;
-    border-radius: 10px; margin-right: 10px; margin-bottom: 10px; transition: 0.2s; flex-grow: 1;
-}
-.tabs button:hover { background-color: #4caf50; color: white; transform: scale(1.05); }
-.tabs button.active { background-color: #00796b; color: white; }
-.tab-content { display: none; width: 90%; max-width: 800px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 20px; }
-.tab-content.active { display: block; }
-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-th, td { padding: 12px; border: 1px solid #ddd; text-align: left; font-size: 16px; background-color: #fafafa; }
-th { background-color: #e0f7fa; font-weight: bold; }
-tr:nth-child(even) { background-color: #f9f9f9; }
-tr:hover { background-color: #f1f1f1; }
-button.action { background-color: #4CAF50; color: white; border: none; padding: 6px 12px; border-radius: 10px; cursor: pointer; margin-left: 5px; }
-button.action:hover { background-color: #45a049; transform: scale(1.05); }
-input[type="text"] { width: 100%; padding: 4px; box-sizing: border-box; }
-@media (max-width: 768px) { .tabs button { width: 100%; margin-right: 0; } .tab-content { width: 100%; padding: 15px; } th, td { font-size: 14px; padding: 10px; } button { width: 100%; margin-top: 10px; } }
-</style>
-</head>
-<body>
-
-<h1>Kerkblad HHK Scherpenzeel- Renswoude</h1>
-
-<!-- Tabbladen -->
-<div class="tabs">
-    <button id="tab-wijk1" class="active" onclick="openTab('wijk1')">Bezorglijst Wijk 1</button>
-    <button id="tab-wijk2" onclick="openTab('wijk2')">Bezorglijst Wijk 2</button>
-</div>
-
-<!-- Wijk 1 -->
-<div id="wijk1-tab" class="tab-content active">
-    <h2>Bezorglijst Wijk 1 (Jeroen & Elize)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Adres</th>
-                <th>Opmerking</th>
-                <th>Bezorgd</th>
-                <th>Acties</th>
-            </tr>
-        </thead>
-        <tbody id="address-list-wijk1"></tbody>
-    </table>
-    <button onclick="addNewRow('wijk1')">+ Nieuw Adres</button>
-    <button onclick="resetBezorgstatus('wijk1')">Reset Bezorgstatus</button>
-</div>
-
-<!-- Wijk 2 -->
-<div id="wijk2-tab" class="tab-content">
-    <h2>Bezorglijst Wijk 2 (Jaco & Jo-Anneke)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Adres</th>
-                <th>Opmerking</th>
-                <th>Bezorgd</th>
-                <th>Acties</th>
-            </tr>
-        </thead>
-        <tbody id="address-list-wijk2"></tbody>
-    </table>
-    <button onclick="addNewRow('wijk2')">+ Nieuw Adres</button>
-    <button onclick="resetBezorgstatus('wijk2')">Reset Bezorgstatus</button>
-</div>
-
 <script>
 let appData = { wijk1: [], wijk2: [] };
 
-// Tabbladen
+// --- Adres formatteren (HOOFD FIX) ---
+function formatAddress(address) {
+    if (!address) return "";
+
+    // dubbele en begin/eind spaties weg
+    address = address.trim().replace(/\s+/g, " ");
+
+    // komma → nieuwe regel
+    if (address.includes(",")) {
+        return address.split(",").map(a => a.trim()).join("<br>");
+    }
+
+    return address;
+}
+
+// --- Tabbladen ---
 function openTab(tabName) {
     document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
     document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
@@ -94,31 +24,55 @@ function openTab(tabName) {
     document.getElementById("tab-" + tabName).classList.add("active");
 }
 
-// Load/Save
-function loadFromStorage() {
-    const w1 = localStorage.getItem("wijk1Data");
-    const w2 = localStorage.getItem("wijk2Data");
-    if (w1) appData.wijk1 = JSON.parse(w1);
-    if (w2) appData.wijk2 = JSON.parse(w2);
-    displayAddresses('wijk1');
-    displayAddresses('wijk2');
-}
-function saveToStorage() {
-    localStorage.setItem("wijk1Data", JSON.stringify(appData.wijk1));
-    localStorage.setItem("wijk2Data", JSON.stringify(appData.wijk2));
+// --- Data laden ---
+function loadAddresses() {
+    const stored = localStorage.getItem("kerbode");
+
+    if (stored) {
+        appData = JSON.parse(stored);
+    } else {
+        // jouw arrays inladen + opschonen
+        appData.wijk1 = wijk1Data.map(a => ({
+            ...a,
+            address: a.address.trim().replace(/\s+/g, " "),
+            delivered: false
+        }));
+
+        appData.wijk2 = wijk2Data.map(a => ({
+            ...a,
+            address: a.address.trim().replace(/\s+/g, " "),
+            delivered: false
+        }));
+
+        saveData();
+    }
+
+    displayAddresses("wijk1");
+    displayAddresses("wijk2");
 }
 
-// Display
+// --- Opslaan ---
+function saveData() {
+    localStorage.setItem("kerbode", JSON.stringify(appData));
+}
+
+// --- Weergave ---
 function displayAddresses(wijk) {
     const tbody = document.getElementById(`address-list-${wijk}`);
     tbody.innerHTML = "";
+
     appData[wijk].forEach((item, index) => {
         tbody.innerHTML += `
         <tr>
             <td>${item.name}</td>
-            <td>${item.address}</td>
+            <td style="line-height:1.3;">
+                ${formatAddress(item.address)}
+            </td>
             <td>${item.comment || ''}</td>
-            <td><input type="checkbox" ${item.delivered ? 'checked' : ''} onchange="toggleDelivered('${wijk}', ${index}, this.checked)"></td>
+            <td>
+                <input type="checkbox" ${item.delivered ? 'checked' : ''}
+                onchange="toggleDelivered('${wijk}', ${index}, this.checked)">
+            </td>
             <td>
                 <button class="action" onclick="editRow('${wijk}', ${index}, this)">✏️</button>
                 <button class="action" onclick="deleteRow('${wijk}', ${index})">❌</button>
@@ -127,23 +81,24 @@ function displayAddresses(wijk) {
     });
 }
 
-// Checkbox
+// --- Checkbox ---
 function toggleDelivered(wijk, index, checked) {
     appData[wijk][index].delivered = checked;
-    saveToStorage();
+    saveData();
 }
 
-// Reset
+// --- Reset ---
 function resetBezorgstatus(wijk) {
     appData[wijk].forEach(item => item.delivered = false);
-    saveToStorage();
+    saveData();
     displayAddresses(wijk);
 }
 
-// Inline bewerken
+// --- Bewerken ---
 function editRow(wijk, index, btn) {
     const row = btn.closest("tr");
     const item = appData[wijk][index];
+
     row.innerHTML = `
         <td><input type="text" value="${item.name}"></td>
         <td><input type="text" value="${item.address}"></td>
@@ -155,38 +110,45 @@ function editRow(wijk, index, btn) {
         </td>`;
 }
 
-// Opslaan
+// --- Opslaan na bewerken ---
 function saveRow(wijk, index, btn) {
     const row = btn.closest("tr");
     const inputs = row.querySelectorAll("input");
+
     appData[wijk][index] = {
         name: inputs[0].value.trim(),
-        address: inputs[1].value.trim(),
+        address: inputs[1].value.trim().replace(/\s+/g, " "),
         comment: inputs[2].value.trim(),
         delivered: inputs[3].checked
     };
-    saveToStorage();
+
+    saveData();
     displayAddresses(wijk);
 }
 
-// Verwijderen
+// --- Verwijderen ---
 function deleteRow(wijk, index) {
     if (!confirm("Weet je zeker dat je dit adres wilt verwijderen?")) return;
+
     appData[wijk].splice(index, 1);
-    saveToStorage();
+    saveData();
     displayAddresses(wijk);
 }
 
-// Nieuwe rij toevoegen
+// --- Nieuwe rij ---
 function addNewRow(wijk) {
-    appData[wijk].push({ name: "", address: "", comment: "", delivered: false });
+    appData[wijk].push({
+        name: "",
+        address: "",
+        comment: "",
+        delivered: false
+    });
+
     const index = appData[wijk].length - 1;
     displayAddresses(wijk);
     editRow(wijk, index);
 }
 
-document.addEventListener("DOMContentLoaded", loadFromStorage);
+// --- Start ---
+document.addEventListener("DOMContentLoaded", loadAddresses);
 </script>
-
-</body>
-</html>
