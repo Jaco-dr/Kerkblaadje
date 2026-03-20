@@ -28,7 +28,14 @@ function displayAddresses(wijk) {
     const wijkList = document.getElementById(`address-list-${wijk}`);
     wijkList.innerHTML = ""; // Maak de lijst eerst leeg
 
-    const data = wijk === 'wijk1' ? wijk1Data : wijk2Data;
+    let appData = JSON.parse(localStorage.getItem("kerbode")) || {
+    wijk1: wijk1Data.map(a => ({ ...a, delivered: false })),
+    wijk2: wijk2Data.map(a => ({ ...a, delivered: false }))
+};
+
+function opslaan() {
+    localStorage.setItem("kerbode", JSON.stringify(appData));
+}
 
     data.forEach((item, index) => {
         wijkList.innerHTML += `
